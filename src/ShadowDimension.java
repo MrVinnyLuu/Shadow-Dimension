@@ -11,31 +11,39 @@ import java.io.BufferedReader;
 
 public class ShadowDimension extends AbstractGame {
 
-    /* Window Constants */
+    /* Display Constants */
+    private final static int REFRESH_RATE = 144;
     private final static int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
-    private final Image BACKGROUND_IMAGE = new Image("res/background0.png");
+
+    private final Image LVL0_BACKGROUND = new Image("res/background0.png");
+    private final Image LVL1_BACKGROUND = new Image("res/background1.png");
 
     /* Text and font Constants */
-    private final String FONT_FILE = "res/frostbite.ttf";
+    private final String FONT_FILENAME = "res/frostbite.ttf";
     private final static int STANDARD_FONT_SIZE = 75;
-    private final Font STANDARD_TEXT = new Font(FONT_FILE, STANDARD_FONT_SIZE);
+    private final Font STANDARD_TEXT = new Font(FONT_FILENAME, STANDARD_FONT_SIZE);
 
     private final static String GAME_TITLE = "SHADOW DIMENSION";
     private final static double TITLE_X = 260, TITLE_Y = 250;
 
     private final static int INSTRUCT_FONT_SIZE = 40;
-    private final Font INSTRUCTIONS_TEXT = new Font(FONT_FILE, INSTRUCT_FONT_SIZE);
-    private final static String START_INSTRUCTION = "PRESS SPACE TO START";
-    private final static double START_X_OFFSET = 90, START_Y_OFFSET = 190;
-    private final static String CONTROLS_INSTRUCTION = "USE ARROW KEYS TO FIND GATE";
-    // Drawn 45 pixels below appears to provide adequate spacing
-    private final static double INSTRUCT_LINE_SPACING = 45;
+    private final Font INSTRUCTIONS_TEXT = new Font(FONT_FILENAME, INSTRUCT_FONT_SIZE);
+    private final static double LINE_SPACING = 45; // Drawn 45 pixels below appears to provide adequate spacing
 
+    private final static String START_INSTRUCTION = "PRESS SPACE TO START";
+    private final static double LVL0_START_X_OFFSET = 90, LVL0_START_Y_OFFSET = 190;
+    private final static double LVL1_START_X = 350, LVL1_START_Y = 350;
+    private final static String MOVE_CTRLS_INSTRUCT = "USE ARROW KEYS TO FIND GATE";
+    private final static String ATTACK_CTRL_INSTRUCT = "PRESS A TO ATTACK";
+    private final static String NAVEC_INSTRUCT = "DEFEAT NAVEC TO WIN";
+
+    private final static String LVL_COMPLETE = "LEVEL COMPLETE!";
+    private final static double LVL_COMPLETE_DISPLAY_TIME = 3;
     private final static String CONGRATS = "CONGRATULATIONS!";
     private final static String GAME_OVER = "GAME OVER!";
 
     private final static int HP_FONT_SIZE = 30;
-    private final Font HP_TEXT = new Font(FONT_FILE, HP_FONT_SIZE);
+    private final Font HP_TEXT = new Font(FONT_FILENAME, HP_FONT_SIZE);
     private final static double HP_TEXT_X = 20, HP_TEXT_Y = 25;
     private final static Colour GREEN_HP = new Colour(0, 0.8, 0.2);
     private final static double GREEN_HP_THRESHOLD = 65;
@@ -44,24 +52,29 @@ public class ShadowDimension extends AbstractGame {
     private final static Colour RED_HP = new Colour(1, 0, 0);
 
     /* CSV Constants */
-    private final static String DATA_FILE = "res/level0.csv";
-    private final static int MAX_DATA_ENTRIES = 60;
+    private final static String LVL0_DATA_FILENAME = "res/level0.csv";
+    private final static int LVL0_MAX_DATA_ENTRIES = 60;
+    private final static String LVL1_DATA_FILENAME = "res/level1.csv";
+    private final static int LVL1_MAX_DATA_ENTRIES = 29;
     private final static int DATA_COLUMNS = 3;
     private final static int DATA_NAME_COL = 0, DATA_X_COL = 1, DATA_Y_COL = 2;
 
     /* Game element Constants */
-    private final static int GAME_START = 1, GAME_PLAY = 2, GAME_WIN = 3, GAME_LOSE = 4;
+    private final static int GAME_START = 0, GAME_PLAY = 1, FIN_LVL0 = 2, START_LVL1 = 3;
+    private final static int GAME_WIN = -1, GAME_LOSE = -2;
     private final static double PORTAL_MIN_X = 950, PORTAL_MIN_Y = 670;
     // Max number of obstacles is max number of data entries minus entries for player, top left and bottom
-    private final static Obstacle[] obstacles = new Obstacle[MAX_DATA_ENTRIES-3];
+    private final static Obstacle[] obstacles = new Obstacle[LVL0_MAX_DATA_ENTRIES-3];
 
     /* Fae Constants */
     private final static String CHARACTER_NAME = "Fae";
-    private final Image FAE_FACE_LEFT = new Image("res/fae/faeLeft.png");
-    private final Image FAE_FACE_RIGHT = new Image("res/fae/faeRight.png");
+    private final Image CHARACTER_FACE_LEFT = new Image("res/fae/faeLeft.png");
+    private final Image CHARACTER_FACE_RIGHT = new Image("res/fae/faeRight.png");
 
     /* Attributes */
     private int gameState = GAME_START;
+    private int currentLevel = 0;
+    private double lvlCompleteTimer = 0;
     private PlayableCharacter player;
     private Point topLeftCorner, bottomRightCorner;
 
@@ -87,7 +100,7 @@ public class ShadowDimension extends AbstractGame {
 
         // Initialize playerFae using the first row of the CSV data as per assignment specifications
         player = new PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData[0][DATA_X_COL]),
-                Double.parseDouble(csvData[0][DATA_Y_COL]), FAE_FACE_LEFT, FAE_FACE_RIGHT);
+                Double.parseDouble(csvData[0][DATA_Y_COL]), CHARACTER_FACE_LEFT, CHARACTER_FACE_RIGHT);
 
         // Set the boundaries using the last two rows of the CSV data as per assignment specifications
         bottomRightCorner = new Point(Double.parseDouble(csvData[csvData.length-1][DATA_X_COL]),
@@ -114,10 +127,10 @@ public class ShadowDimension extends AbstractGame {
     private String[][] readCSV() {
 
         String row;
-        String[][] data = new String[MAX_DATA_ENTRIES][DATA_COLUMNS];
+        String[][] data = new String[LVL0_MAX_DATA_ENTRIES][DATA_COLUMNS];
         int i = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILE))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(LVL0_DATA_FILENAME))) {
             while ((row = br.readLine()) != null) {
                 data[i] = row.split(",");
                 i++;
@@ -139,25 +152,47 @@ public class ShadowDimension extends AbstractGame {
         if (gameState == GAME_START) {
 
             // Get offset required to centre the "controls" instructions relative to the "start" instructions
-            double ctrlsXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION)/2
-                    - INSTRUCTIONS_TEXT.getWidth(CONTROLS_INSTRUCTION)/2;
+            double ctrlsXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION) / 2
+                    - INSTRUCTIONS_TEXT.getWidth(MOVE_CTRLS_INSTRUCT) / 2;
 
             STANDARD_TEXT.drawString(GAME_TITLE, TITLE_X, TITLE_Y);
-            INSTRUCTIONS_TEXT.drawString(START_INSTRUCTION, TITLE_X + START_X_OFFSET, TITLE_Y + START_Y_OFFSET);
-            INSTRUCTIONS_TEXT.drawString(CONTROLS_INSTRUCTION,
-                    TITLE_X + START_X_OFFSET + ctrlsXOffset, TITLE_Y + START_Y_OFFSET + INSTRUCT_LINE_SPACING);
+            INSTRUCTIONS_TEXT.drawString(START_INSTRUCTION, TITLE_X + LVL0_START_X_OFFSET,
+                    TITLE_Y + LVL0_START_Y_OFFSET);
+            INSTRUCTIONS_TEXT.drawString(MOVE_CTRLS_INSTRUCT,
+                    TITLE_X + LVL0_START_X_OFFSET + ctrlsXOffset, TITLE_Y + LVL0_START_Y_OFFSET + LINE_SPACING);
+
+        } else if (gameState == FIN_LVL0) {
+
+            lvlCompleteTimer += 1.0/REFRESH_RATE;
+            double xPos = WINDOW_WIDTH/2.0 - STANDARD_TEXT.getWidth(LVL_COMPLETE)/2.0;
+            double yPos = WINDOW_HEIGHT/2.0 + STANDARD_FONT_SIZE/2.0;
+            STANDARD_TEXT.drawString(LVL_COMPLETE, xPos, yPos);
+
+        } else if (gameState == START_LVL1) {
+
+            INSTRUCTIONS_TEXT.drawString(START_INSTRUCTION, LVL1_START_X, LVL1_START_Y);
+
+            double attackCtrlXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION) / 2
+                    - INSTRUCTIONS_TEXT.getWidth(ATTACK_CTRL_INSTRUCT) / 2;
+            INSTRUCTIONS_TEXT.drawString(ATTACK_CTRL_INSTRUCT,
+                    LVL1_START_X + attackCtrlXOffset, LVL1_START_Y + LINE_SPACING);
+
+            double navecInstructXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION) / 2
+                    - INSTRUCTIONS_TEXT.getWidth(NAVEC_INSTRUCT) / 2;
+            INSTRUCTIONS_TEXT.drawString(NAVEC_INSTRUCT,
+                    LVL1_START_X + navecInstructXOffset, LVL1_START_Y + 2*LINE_SPACING);
 
         } else if (gameState == GAME_WIN) {
 
-            double congratsXPos = WINDOW_WIDTH/2.0 - STANDARD_TEXT.getWidth(CONGRATS)/2.0;
-            double congratsYPos = WINDOW_HEIGHT/2.0 + STANDARD_FONT_SIZE/2.0;
-            STANDARD_TEXT.drawString(CONGRATS, congratsXPos, congratsYPos);
+            double xPos = WINDOW_WIDTH/2.0 - STANDARD_TEXT.getWidth(CONGRATS)/2.0;
+            double yPos = WINDOW_HEIGHT/2.0 + STANDARD_FONT_SIZE/2.0;
+            STANDARD_TEXT.drawString(CONGRATS, xPos, yPos);
 
         } else if (gameState == GAME_LOSE) {
 
-            double gameOverXPos = WINDOW_WIDTH/2.0 - STANDARD_TEXT.getWidth(GAME_OVER)/2;
-            double gameOverYPos = WINDOW_HEIGHT/2.0 + STANDARD_FONT_SIZE/2.0;
-            STANDARD_TEXT.drawString(GAME_OVER, gameOverXPos, gameOverYPos);
+            double xPos = WINDOW_WIDTH/2.0 - STANDARD_TEXT.getWidth(GAME_OVER)/2;
+            double yPos = WINDOW_HEIGHT/2.0 + STANDARD_FONT_SIZE/2.0;
+            STANDARD_TEXT.drawString(GAME_OVER, xPos, yPos);
 
         }
 
@@ -169,7 +204,7 @@ public class ShadowDimension extends AbstractGame {
     private void displayGame() {
 
         // Display the background
-        BACKGROUND_IMAGE.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
+        LVL0_BACKGROUND.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
 
         // Display the HP
         Colour HP_colour;
@@ -227,15 +262,19 @@ public class ShadowDimension extends AbstractGame {
      */
     private void checkGameState(Input input) {
 
-        if (gameState == GAME_START && input.wasPressed(Keys.SPACE)) {
+        if ((gameState == GAME_START || gameState == START_LVL1) && input.wasPressed(Keys.SPACE)) {
             initializeLevel();
             gameState = GAME_PLAY;
         // Lose condition: Player HP reaches its minimum
         } else if (gameState == GAME_PLAY && player.getHP() == PlayableCharacter.getMinHP()) {
             gameState = GAME_LOSE;
-        // Win condition: Player position is in the portal
-        } else if (gameState == GAME_PLAY && player.centre().x >= PORTAL_MIN_X && player.centre().y >= PORTAL_MIN_Y) {
-            gameState = GAME_WIN;
+        // Level 0 win condition: Player position is in the portal
+        } else if (gameState == GAME_PLAY && currentLevel == 0
+                && player.centre().x >= PORTAL_MIN_X && player.centre().y >= PORTAL_MIN_Y) {
+            gameState = FIN_LVL0;
+        } else if (gameState == FIN_LVL0 && currentLevel == 0 && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
+            currentLevel = 1;
+            gameState = START_LVL1;
         }
 
     }
