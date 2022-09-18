@@ -268,10 +268,11 @@ public class ShadowDimension extends AbstractGame {
     }
 
     private void updateEnemyStates() {
-        enemies.removeIf(Enemy::isExhausted);
         for (Enemy anEnemy: enemies) {
             anEnemy.updateState();
+            if (anEnemy.getType().equals("Navec") && anEnemy.isExhausted()) gameState = GAME_WIN;
         }
+        enemies.removeIf(Enemy::isExhausted);
     }
 
     /**
@@ -347,9 +348,6 @@ public class ShadowDimension extends AbstractGame {
         } else if ((gameState == GAME_START || gameState == START_LVL1) && input.wasPressed(Keys.SPACE)) {
             initializeLevel();
             gameState = GAME_PLAY;
-        // Lose condition: Player HP reaches its minimum
-        } else if (gameState == GAME_PLAY && player.getHP() == PlayableCharacter.getMinHP()) {
-            gameState = GAME_LOSE;
         // Level 0 win condition: Player position is in the portal
         } else if (gameState == GAME_PLAY && currentLevel == 0
                 && player.centre().x >= PORTAL_MIN_X && player.centre().y >= PORTAL_MIN_Y) {
@@ -357,6 +355,9 @@ public class ShadowDimension extends AbstractGame {
         } else if (gameState == FIN_LVL0 && currentLevel == 0 && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
             currentLevel = 1;
             gameState = START_LVL1;
+        // Lose condition: Player HP reaches its minimum
+        } else if (gameState == GAME_PLAY && player.getHP() == PlayableCharacter.getMinHP()) {
+            gameState = GAME_LOSE;
         }
 
     }

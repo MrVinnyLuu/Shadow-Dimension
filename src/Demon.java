@@ -22,7 +22,6 @@ public class Demon extends Enemy {
 
     private final Random RAND = new Random();
 
-    private String demonType = "Demon";
     private double xPos, yPos;
     private double horizontalSpeed = 0, verticalSpeed = 0;
     protected boolean isFaceRight, isInvincible = false;
@@ -39,7 +38,6 @@ public class Demon extends Enemy {
         super("Navec", xPos, yPos, navecImage, navecDamage, navecHP);
         this.xPos = xPos;
         this.yPos = yPos;
-        demonType = "Navec";
         initializeMovementSpeed(true);
     }
 
@@ -118,7 +116,7 @@ public class Demon extends Enemy {
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
-                attacker, damage, demonType, demonType, healthPoints, getMaxHP());
+                attacker, damage, getType(), getType(), healthPoints, getMaxHP());
         isInvincible = true;
 
     }
