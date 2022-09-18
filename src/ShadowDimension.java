@@ -3,6 +3,7 @@ import bagel.util.Point;
 import bagel.util.Colour;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.util.ArrayList;
 
 /**
  * SWEN20003 Project 1, Semester 2, 2022
@@ -52,9 +53,8 @@ public class ShadowDimension extends AbstractGame {
     private final static Colour RED_HP = new Colour(1, 0, 0);
 
     /* CSV Constants */
-    private final static String LVL0_DATA_FILENAME = "res/level0.csv";
+    private final static String DATA_FILEPATH = "res/level";
     private final static int LVL0_MAX_DATA_ENTRIES = 60;
-    private final static String LVL1_DATA_FILENAME = "res/level1.csv";
     private final static int LVL1_MAX_DATA_ENTRIES = 29;
     private final static int DATA_COLUMNS = 3;
     private final static int DATA_NAME_COL = 0, DATA_X_COL = 1, DATA_Y_COL = 2;
@@ -63,8 +63,11 @@ public class ShadowDimension extends AbstractGame {
     private final static int GAME_START = 0, GAME_PLAY = 1, FIN_LVL0 = 2, START_LVL1 = 3;
     private final static int GAME_WIN = -1, GAME_LOSE = -2;
     private final static double PORTAL_MIN_X = 950, PORTAL_MIN_Y = 670;
-    // Max number of obstacles is max number of data entries minus entries for player, top left and bottom
-    private final static Obstacle[] obstacles = new Obstacle[LVL0_MAX_DATA_ENTRIES-3];
+
+    /* Game Object Constants */
+    private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
+    private final Image WALL_IMAGE = new Image("res/wall.png");
+    private final Image TREE_IMAGE = new Image("res/tree.png");
 
     /* Fae Constants */
     private final static String CHARACTER_NAME = "Fae";
@@ -96,7 +99,7 @@ public class ShadowDimension extends AbstractGame {
      */
     private void initializeLevel() {
 
-        String[][] csvData = readCSV();
+       String[][] csvData = readCSV();
 
         // Initialize playerFae using the first row of the CSV data as per assignment specifications
         player = new PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData[0][DATA_X_COL]),
@@ -126,11 +129,13 @@ public class ShadowDimension extends AbstractGame {
      */
     private String[][] readCSV() {
 
+        int maxEntries = (currentLevel == 0) ? LVL0_MAX_DATA_ENTRIES : LVL1_MAX_DATA_ENTRIES;
+
         String row;
-        String[][] data = new String[LVL0_MAX_DATA_ENTRIES][DATA_COLUMNS];
+        String[][] data = new String[maxEntries][DATA_COLUMNS];
         int i = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(LVL0_DATA_FILENAME))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILEPATH + currentLevel + ".csv"))) {
             while ((row = br.readLine()) != null) {
                 data[i] = row.split(",");
                 i++;
