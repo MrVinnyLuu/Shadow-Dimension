@@ -14,4 +14,14 @@ public class Sinkhole extends Enemy {
         return SINKHOLE_IMAGE;
     }
 
+    @Override
+    public void updateState() {
+        return;
+    }
+
+    @Override
+    public void reverseMovement() {
+        return;
+    }
+
 }

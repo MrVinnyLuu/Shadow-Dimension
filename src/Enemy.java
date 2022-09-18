@@ -13,9 +13,10 @@ public abstract class Enemy extends Rectangle {
         this.damage = damage;
     }
 
-    /**
-     * Method inflicts enemy's damage on "player" and prints out the required log to the command line
-     */
+    public abstract void updateState();
+
+    public abstract void reverseMovement();
+
     public void dealsDamage(PlayableCharacter player) {
         player.takesDamage(damage);
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",

@@ -1,6 +1,6 @@
 import bagel.Image;
 
-public class Navec extends Demon{
+public class Navec extends Demon {
 
     private final static int NAVEC_MAX_HP = 2*DEMON_MAX_HP;
     private final static int NAVEC_MIN_HP = 0;
@@ -19,7 +19,7 @@ public class Navec extends Demon{
 
     @Override
     public Image getImage() {
-        return NAVEC_FACE_RIGHT;
+        return (super.isFaceRight) ? NAVEC_FACE_RIGHT : NAVEC_FACE_LEFT;
     }
 
 }

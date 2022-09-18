@@ -231,7 +231,6 @@ public class ShadowDimension extends AbstractGame {
             LVL1_BACKGROUND.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
         }
 
-
         // Display the HP
         Colour HP_colour;
         if (player.getHPPercent() >= GREEN_HP_THRESHOLD) {
@@ -260,13 +259,20 @@ public class ShadowDimension extends AbstractGame {
 
     }
 
+    private void updateEnemies() {
+        enemies.removeIf(Enemy::isExhausted);
+        for (Enemy anEnemy: enemies) {
+            anEnemy.updateState();
+        }
+    }
+
     /**
      * Method detects if the character had moved out of bounds or inside an obstacle and reverses
      * that movement
      */
     private void detectCollisions() {
 
-        // Check to see if player has collided with the boundaries
+        // Check if player has collided with the boundaries
         // Separate 'if' statements so player can "slide" along boundaries, but can't "escape" at corners
         if (bottomRightCorner.x < player.topLeft().x || player.topLeft().x < topLeftCorner.x) {
             player.xPosRollback();
@@ -275,30 +281,52 @@ public class ShadowDimension extends AbstractGame {
             player.yPosRollback();
         }
 
-        // Check to see if player has collided with an obstacle
+        // Check if player or an enemy has collided with an obstacle
         for (Obstacle anObstacle : obstacles) {
+
             if (anObstacle.intersects(player)) {
                 player.xPosRollback();
                 player.yPosRollback();
             }
+
+            for (Enemy anEnemy: enemies) {
+                if (anObstacle.intersects(anEnemy)) {
+                    anEnemy.reverseMovement();
+                }
+            }
+
         }
 
-        for (Enemy anEnemy: enemies) {
-            if (anEnemy.getType().equals("Sinkhole") && anEnemy.intersects(player)) {
-                anEnemy.dealsDamage(player);
+        for (Enemy enemyA: enemies) {
+
+            // Check if enemy has collided with the bounds
+            if (bottomRightCorner.x < enemyA.topLeft().x || enemyA.topLeft().x < topLeftCorner.x
+                || bottomRightCorner.y < enemyA.topLeft().y || enemyA.topLeft().y < topLeftCorner.y) {
+                enemyA.reverseMovement();
+            }
+
+            // Check if player has collided with a sinkhole
+            if (enemyA.getType().equals("Sinkhole") && enemyA.intersects(player)) {
+                enemyA.dealsDamage(player);
                 player.xPosRollback();
                 player.yPosRollback();
             }
-        }
 
-        enemies.removeIf(Enemy::isExhausted);
+            // Check if an enemy has collided with a sinkhole
+            for (Enemy enemyB: enemies) {
+                if (enemyA.getType().equals("Sinkhole") && enemyA.intersects(enemyB)) {
+                    enemyB.reverseMovement();
+                }
+            }
+
+        }
 
     }
 
     /**
      * Method checks what state the game should be in
      */
-    private void checkGameState(Input input) {
+    private void updateGameState(Input input) {
 
         if (gameState == GAME_START && input.wasPressed(Keys.W)) {
             currentLevel = 1;
@@ -328,11 +356,12 @@ public class ShadowDimension extends AbstractGame {
     @Override
     protected void update(Input input) {
 
-        checkGameState(input);
+        updateGameState(input);
 
         if (gameState == GAME_PLAY) {
-            player.checkPlayerState(input);
+            player.controlCharacter(input);
             detectCollisions();
+            if (currentLevel != 0) updateEnemies();
             displayGame();
         } else {
             displayScreen();

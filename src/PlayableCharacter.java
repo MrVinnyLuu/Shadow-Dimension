@@ -34,9 +34,7 @@ public abstract class PlayableCharacter extends Rectangle {
      */
     public abstract Image getImage();
 
-    public void checkPlayerState(Input input) {
-
-        controlCharacter(input);
+    public void updatePlayerState() {
 
         cooldownTimer += 1.0/ShadowDimension.REFRESH_RATE;
 
@@ -55,6 +53,8 @@ public abstract class PlayableCharacter extends Rectangle {
      * Method takes user input and correspondingly moves the character
      */
     public void controlCharacter(Input input) {
+
+        updatePlayerState();
 
         if (input.isDown(Keys.A) && cooldownTimer >= COOLDOWN_DURATION) {
             isAttacking = true;
