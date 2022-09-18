@@ -108,6 +108,18 @@ public class PlayableCharacter extends Rectangle {
     }
 
     /**
+     * Method resets the player HP to max
+     */
+    public void resetHP() {
+        healthPoints = MAX_HP;
+    }
+
+    public void setPosition(double xPos, double yPos) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
+
+    /**
      * Method lowers the character's health points according to "damage"
      */
     public void takesDamage(int damage) {

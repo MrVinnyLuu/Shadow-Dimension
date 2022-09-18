@@ -54,9 +54,6 @@ public class ShadowDimension extends AbstractGame {
 
     /* CSV Constants */
     private final static String DATA_FILEPATH = "res/level";
-    private final static int LVL0_MAX_DATA_ENTRIES = 60;
-    private final static int LVL1_MAX_DATA_ENTRIES = 29;
-    private final static int DATA_COLUMNS = 3;
     private final static int DATA_NAME_COL = 0, DATA_X_COL = 1, DATA_Y_COL = 2;
 
     /* Game element Constants */
@@ -65,6 +62,7 @@ public class ShadowDimension extends AbstractGame {
     private final static double PORTAL_MIN_X = 950, PORTAL_MIN_Y = 670;
 
     /* Game Object Constants */
+    private final static ArrayList<Enemy> enemies = new ArrayList<>();
     private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
     private final Image WALL_IMAGE = new Image("res/wall.png");
     private final Image TREE_IMAGE = new Image("res/tree.png");
@@ -99,26 +97,45 @@ public class ShadowDimension extends AbstractGame {
      */
     private void initializeLevel() {
 
-       String[][] csvData = readCSV();
+        ArrayList<String[]> csvData = readCSV();
 
-        // Initialize playerFae using the first row of the CSV data as per assignment specifications
-        player = new PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData[0][DATA_X_COL]),
-                Double.parseDouble(csvData[0][DATA_Y_COL]), CHARACTER_FACE_LEFT, CHARACTER_FACE_RIGHT);
+        if (currentLevel == 0) {
+            // Initialize playerFae using the first row of the CSV data as per assignment specifications
+            player = new PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]), CHARACTER_FACE_LEFT, CHARACTER_FACE_RIGHT);
+        } else {
+            enemies.clear();
+            obstacles.clear();
+            player.resetHP();
+            player.setPosition(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
+        }
 
         // Set the boundaries using the last two rows of the CSV data as per assignment specifications
-        bottomRightCorner = new Point(Double.parseDouble(csvData[csvData.length-1][DATA_X_COL]),
-                Double.parseDouble(csvData[csvData.length-1][DATA_Y_COL]));
-        topLeftCorner = new Point(Double.parseDouble(csvData[csvData.length-2][DATA_X_COL]),
-                Double.parseDouble(csvData[csvData.length-2][DATA_Y_COL]));
+        bottomRightCorner = new Point(Double.parseDouble(csvData.get(csvData.size()-1)[DATA_X_COL]),
+                Double.parseDouble(csvData.get(csvData.size()-1)[DATA_Y_COL]));
+        topLeftCorner = new Point(Double.parseDouble(csvData.get(csvData.size()-2)[DATA_X_COL]),
+                Double.parseDouble(csvData.get(csvData.size()-2)[DATA_Y_COL]));
 
-        // Populate obstacles[] with using the rest of the rows of the CSV data
+        // Populate obstacles & enemies using the rest of the rows of the CSV data
         for (String[] row : csvData) {
-            if (row[DATA_NAME_COL].equals("Wall")) {
-                obstacles[Obstacle.getNum()] = new Wall(Double.parseDouble(row[DATA_X_COL]),
-                        Double.parseDouble(row[DATA_Y_COL]));
-            } else if (row[DATA_NAME_COL].equals("Sinkhole")) {
-                obstacles[Obstacle.getNum()] = new Sinkhole(Double.parseDouble(row[DATA_X_COL]),
-                        Double.parseDouble(row[DATA_Y_COL]));
+            switch (row[DATA_NAME_COL]) {
+                case "Sinkhole":
+                    enemies.add(new Sinkhole(Double.parseDouble(row[DATA_X_COL]),
+                            Double.parseDouble(row[DATA_Y_COL])));
+                    break;
+                case "Demon":
+                    enemies.add(new Demon(Double.parseDouble(row[DATA_X_COL]),
+                            Double.parseDouble(row[DATA_Y_COL])));
+                    break;
+                case "Wall":
+                    obstacles.add(new Obstacle(Double.parseDouble(row[DATA_X_COL]),
+                            Double.parseDouble(row[DATA_Y_COL]), WALL_IMAGE));
+                    break;
+                case "Tree":
+                    obstacles.add(new Obstacle(Double.parseDouble(row[DATA_X_COL]),
+                            Double.parseDouble(row[DATA_Y_COL]), TREE_IMAGE));
+                    break;
             }
         }
 
@@ -127,18 +144,14 @@ public class ShadowDimension extends AbstractGame {
     /**
      * Method reads the CSV file and returns a string array of CSV data
      */
-    private String[][] readCSV() {
-
-        int maxEntries = (currentLevel == 0) ? LVL0_MAX_DATA_ENTRIES : LVL1_MAX_DATA_ENTRIES;
+    private ArrayList<String[]> readCSV() {
 
         String row;
-        String[][] data = new String[maxEntries][DATA_COLUMNS];
-        int i = 0;
+        ArrayList<String[]> data = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILEPATH + currentLevel + ".csv"))) {
             while ((row = br.readLine()) != null) {
-                data[i] = row.split(",");
-                i++;
+                data.add(row.split(","));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -225,9 +238,14 @@ public class ShadowDimension extends AbstractGame {
                 new DrawOptions().setBlendColour(HP_colour));
 
         // Display the obstacles
-        for (int i = 0; i < Obstacle.getNum(); i++) {
-            if (obstacles[i].isntExhausted()) {
-                obstacles[i].getImage().draw(obstacles[i].centre().x, obstacles[i].centre().y);
+        for (Obstacle anObstacle : obstacles) {
+            anObstacle.getImage().draw(anObstacle.centre().x, anObstacle.centre().y);
+        }
+
+        // Display the enemies
+        for (Enemy anEnemy : enemies) {
+            if (anEnemy.isntExhausted()) {
+                anEnemy.getImage().draw(anEnemy.centre().x, anEnemy.centre().y);
             }
         }
 
@@ -253,8 +271,7 @@ public class ShadowDimension extends AbstractGame {
 
         // Check to see if player has collided with an obstacle
         for (Obstacle anObstacle : obstacles) {
-            if (anObstacle.intersects(player) && anObstacle.isntExhausted()) {
-                anObstacle.dealsDamage(player);
+            if (anObstacle.intersects(player)) {
                 player.xPosRollback();
                 player.yPosRollback();
             }

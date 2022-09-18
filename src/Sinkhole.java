@@ -9,6 +9,9 @@ public class Sinkhole extends Enemy {
         super("Sinkhole", xPos, yPos, SINKHOLE_IMAGE, DAMAGE);
     }
 
-
+    @Override
+    public Image getImage() {
+        return SINKHOLE_IMAGE;
+    }
 
 }

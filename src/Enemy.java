@@ -23,6 +23,8 @@ public abstract class Enemy extends Rectangle {
         isExhausted = true;
     }
 
+    public abstract Image getImage();
+
     /**
      * Method returns whether the enemy isn't exhausted i.e. hasn't been killed/fallen into
      */

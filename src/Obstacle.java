@@ -1,7 +1,7 @@
 import bagel.Image;
 import bagel.util.Rectangle;
 
-public abstract class Obstacle extends Rectangle {
+public class Obstacle extends Rectangle {
 
     private final Image displayImage;
 
