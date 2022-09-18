@@ -23,13 +23,17 @@ public abstract class Enemy extends Rectangle {
         isExhausted = true;
     }
 
+    public String getType() {
+        return enemyType;
+    }
+
     public abstract Image getImage();
 
     /**
      * Method returns whether the enemy isn't exhausted i.e. hasn't been killed/fallen into
      */
-    public boolean isntExhausted() {
-        return !isExhausted;
+    public boolean isExhausted() {
+        return isExhausted;
     }
 
 }

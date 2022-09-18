@@ -244,9 +244,7 @@ public class ShadowDimension extends AbstractGame {
 
         // Display the enemies
         for (Enemy anEnemy : enemies) {
-            if (anEnemy.isntExhausted()) {
-                anEnemy.getImage().draw(anEnemy.centre().x, anEnemy.centre().y);
-            }
+            anEnemy.getImage().draw(anEnemy.centre().x, anEnemy.centre().y);
         }
 
         // Display the player
@@ -276,6 +274,16 @@ public class ShadowDimension extends AbstractGame {
                 player.yPosRollback();
             }
         }
+
+        for (Enemy anEnemy: enemies) {
+            if (anEnemy.getType().equals("Sinkhole") && anEnemy.intersects(player)) {
+                anEnemy.dealsDamage(player);
+                player.xPosRollback();
+                player.yPosRollback();
+            }
+        }
+
+        enemies.removeIf(Enemy::isExhausted);
 
     }
 
