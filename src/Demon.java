@@ -6,9 +6,10 @@ import java.util.Random;
 public class Demon extends Enemy {
 
     protected final static int MAX_HP = 40;
-    private final static int MIN_HP = 0;
+    protected final static int MIN_HP = 0;
     protected final static int DAMAGE = 10;
     private final static double ATTACK_RADIUS = 150;
+    private final static double INVINCIBILITY_DURATION = 3;
 
     private final static Image FACE_LEFT = new Image("res/demon/demonLeft.png");
     private final static Image FACE_RIGHT = new Image("res/demon/demonRight.png");
@@ -21,9 +22,11 @@ public class Demon extends Enemy {
 
     private final Random RAND = new Random();
 
+    private String demonType = "Demon";
     private double xPos, yPos;
     private double horizontalSpeed = 0, verticalSpeed = 0;
-    protected boolean isFaceRight;
+    protected boolean isFaceRight, isInvincible = false;
+    private double invincibilityTimer = 0;
 
     public Demon (double xPos, double yPos) {
         super("Demon", xPos, yPos, FACE_LEFT, DAMAGE, MAX_HP);
@@ -36,17 +39,30 @@ public class Demon extends Enemy {
         super("Navec", xPos, yPos, navecImage, navecDamage, navecHP);
         this.xPos = xPos;
         this.yPos = yPos;
+        demonType = "Navec";
         initializeMovementSpeed(true);
     }
 
     @Override
     public Image getImage() {
-        return (isFaceRight) ? FACE_RIGHT : FACE_LEFT;
+        if (isFaceRight && isInvincible) {
+            return INVINCIBLE_RIGHT;
+        } else if (!isFaceRight && isInvincible) {
+            return INVINCIBLE_LEFT;
+        } else if (isFaceRight) {
+            return FACE_RIGHT;
+        } else {
+            return FACE_LEFT;
+        }
     }
 
     @Override
     public int getHPPercent() {
         return (int) Math.round(healthPoints*100.0/MAX_HP);
+    }
+
+    public int getMaxHP() {
+        return MAX_HP;
     }
 
     private void initializeMovementSpeed(boolean isNavec) {
@@ -69,9 +85,21 @@ public class Demon extends Enemy {
 
     @Override
     public void updateState() {
+
+        if (healthPoints <= MIN_HP) exhaust();
+
+        if (isInvincible) {
+            invincibilityTimer += 1.0/ShadowDimension.REFRESH_RATE;
+            if (invincibilityTimer >= INVINCIBILITY_DURATION) {
+                isInvincible = false;
+                invincibilityTimer = 0;
+            }
+        }
+
         xPos += horizontalSpeed;
         yPos += verticalSpeed;
         super.moveTo(new Point(xPos, yPos));
+
     }
 
     @Override
@@ -84,10 +112,15 @@ public class Demon extends Enemy {
 
     @Override
     public void takesDamage(String attacker, int damage) {
+
+        if (isInvincible) return;
+
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
-        System.out.format("%s inflicts %d damage points on Demon. Demon's current health: %d/%d\n",
-                attacker, damage, healthPoints, MAX_HP);
+        System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
+                attacker, damage, demonType, demonType, healthPoints, getMaxHP());
+        isInvincible = true;
+
     }
 
 }

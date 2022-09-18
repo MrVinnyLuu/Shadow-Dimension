@@ -15,6 +15,10 @@ public abstract class Enemy extends Rectangle {
         this.healthPoints = healthPoints;
     }
 
+    protected void exhaust() {
+        isExhausted = true;
+    }
+
     public void updateState() {
         return;
     }

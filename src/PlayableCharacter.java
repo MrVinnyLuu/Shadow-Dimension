@@ -136,7 +136,7 @@ public abstract class PlayableCharacter extends Rectangle {
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
-                attacker, damage, getName(), getName(), healthPoints, MIN_HP);
+                attacker, damage, getName(), getName(), healthPoints, MAX_HP);
     }
 
     public void dealsDamage(Enemy target) {

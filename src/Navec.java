@@ -3,7 +3,6 @@ import bagel.Image;
 public class Navec extends Demon {
 
     private final static int NAVEC_MAX_HP = 2 * MAX_HP;
-    private final static int NAVEC_MIN_HP = 0;
     private final static int NAVEC_DAMAGE = 2 * DAMAGE;
     private final static double NAVEC_ATTACK_RADIUS = 200;
 
@@ -19,7 +18,15 @@ public class Navec extends Demon {
 
     @Override
     public Image getImage() {
-        return (super.isFaceRight) ? NAVEC_FACE_RIGHT : NAVEC_FACE_LEFT;
+        if (isFaceRight && isInvincible) {
+            return NAVEC_INVINCIBLE_RIGHT;
+        } else if (!isFaceRight && isInvincible) {
+            return NAVEC_INVINCIBLE_LEFT;
+        } else if (isFaceRight) {
+            return NAVEC_FACE_RIGHT;
+        } else {
+            return NAVEC_FACE_LEFT;
+        }
     }
 
     @Override
@@ -28,11 +35,8 @@ public class Navec extends Demon {
     }
 
     @Override
-    public void takesDamage(String attacker, int damage) {
-        // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
-        healthPoints = Math.max(healthPoints - damage, NAVEC_MIN_HP);
-        System.out.format("%s inflicts %d damage points on Demon. Demon's current health: %d/%d\n",
-                attacker, damage, healthPoints, NAVEC_MAX_HP);
+    public int getMaxHP() {
+        return NAVEC_MAX_HP;
     }
 
 }
