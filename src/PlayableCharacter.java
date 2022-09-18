@@ -7,12 +7,13 @@ import bagel.util.Rectangle;
 public abstract class PlayableCharacter extends Rectangle {
 
     private final static int MAX_HP = 100, MIN_HP = 0;
+    private final static int DAMAGE = 20;
     private final static double PLAYER_STEP = 2;
     private final static double ATTACK_DURATION = 1, COOLDOWN_DURATION = 2, INVINCIBILITY_DURATION = 3;
 
     // Set initial health to maximum health
     private int healthPoints = MAX_HP;
-    protected boolean isFaceRight = true, isAttacking = false, isInvincible = false;
+    private boolean isFaceRight = true, isAttacking = false, isInvincible = false;
     private double attackTimer = 0, cooldownTimer = COOLDOWN_DURATION, invincibilityTimer = 0;
     // x and y coordinates refers to the top left corner
     private double xPos, yPos, prevX, prevY;
@@ -131,9 +132,23 @@ public abstract class PlayableCharacter extends Rectangle {
     /**
      * Method lowers the character's health points according to "damage"
      */
-    public void takesDamage(int damage) {
+    public void takesDamage(String attacker, int damage) {
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
+        System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
+                attacker, damage, getName(), getName(), healthPoints, MIN_HP);
+    }
+
+    public void dealsDamage(Enemy target) {
+        target.takesDamage(getName(), DAMAGE);
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public boolean isFaceRight() {
+        return isFaceRight;
     }
 
 }

@@ -82,4 +82,12 @@ public class Demon extends Enemy {
         verticalSpeed *= -1;
     }
 
+    @Override
+    public void takesDamage(String attacker, int damage) {
+        // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
+        healthPoints = Math.max(healthPoints - damage, MIN_HP);
+        System.out.format("%s inflicts %d damage points on Demon. Demon's current health: %d/%d\n",
+                attacker, damage, healthPoints, MAX_HP);
+    }
+
 }

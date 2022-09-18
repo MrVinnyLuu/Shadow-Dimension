@@ -13,11 +13,11 @@ public class FaeCharacter extends PlayableCharacter{
 
     @Override
     public Image getImage() {
-       if (isFaceRight && isAttacking) {
+       if (isFaceRight() && isAttacking()) {
            return ATTACK_RIGHT;
-       } else if (!isFaceRight && isAttacking) {
+       } else if (!isFaceRight() && isAttacking()) {
            return ATTACK_LEFT;
-       } else if (isFaceRight) {
+       } else if (isFaceRight()) {
            return FACE_RIGHT;
        } else {
            return FACE_LEFT;

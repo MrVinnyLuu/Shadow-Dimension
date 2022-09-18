@@ -306,6 +306,10 @@ public class ShadowDimension extends AbstractGame {
 
         for (Enemy enemyA: enemies) {
 
+            if (player.isAttacking() && player.intersects(enemyA)) {
+                player.dealsDamage(enemyA);
+            }
+
             // Check if enemy has collided with the bounds
             if (bottomRightCorner.x < enemyA.topLeft().x || enemyA.topLeft().x < topLeftCorner.x
                 || bottomRightCorner.y < enemyA.topLeft().y || enemyA.topLeft().y < topLeftCorner.y) {

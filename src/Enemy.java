@@ -27,10 +27,13 @@ public abstract class Enemy extends Rectangle {
         return -1;
     }
 
+    public void takesDamage(String attacker, int damage) {
+        return;
+    }
+
     public void dealsDamage(PlayableCharacter player) {
-        player.takesDamage(damage);
-        System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
-                enemyType, damage, player.getName(), player.getName(), player.getHP(), PlayableCharacter.getMaxHP());
+        player.takesDamage(enemyType, damage);
+
         isExhausted = true;
     }
 

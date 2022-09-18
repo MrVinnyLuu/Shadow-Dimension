@@ -24,7 +24,15 @@ public class Navec extends Demon {
 
     @Override
     public int getHPPercent() {
-        return (int) Math.round(super.healthPoints*100.0/MAX_HP);
+        return (int) Math.round(super.healthPoints*100.0/NAVEC_MAX_HP);
+    }
+
+    @Override
+    public void takesDamage(String attacker, int damage) {
+        // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
+        healthPoints = Math.max(healthPoints - damage, NAVEC_MIN_HP);
+        System.out.format("%s inflicts %d damage points on Demon. Demon's current health: %d/%d\n",
+                attacker, damage, healthPoints, NAVEC_MAX_HP);
     }
 
 }
