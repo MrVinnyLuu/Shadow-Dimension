@@ -3,11 +3,11 @@ import bagel.util.Point;
 
 import java.util.Random;
 
-public class Demon extends Enemy{
+public class Demon extends Enemy {
 
-    protected final static int DEMON_MAX_HP = 40;
+    protected final static int MAX_HP = 40;
     private final static int MIN_HP = 0;
-    protected final static int DEMON_DAMAGE = 10;
+    protected final static int DAMAGE = 10;
     private final static double ATTACK_RADIUS = 150;
 
     private final static Image FACE_LEFT = new Image("res/demon/demonLeft.png");
@@ -26,14 +26,14 @@ public class Demon extends Enemy{
     protected boolean isFaceRight;
 
     public Demon (double xPos, double yPos) {
-        super("Demon", xPos, yPos, FACE_LEFT, DEMON_DAMAGE);
+        super("Demon", xPos, yPos, FACE_LEFT, DAMAGE, MAX_HP);
         this.xPos = xPos;
         this.yPos = yPos;
         initializeMovementSpeed(false);
     }
 
-    public Demon (double xPos, double yPos, Image navecImage, int navecDamage) {
-        super("Navec", xPos, yPos, navecImage, navecDamage);
+    public Demon (double xPos, double yPos, Image navecImage, int navecDamage, int navecHP) {
+        super("Navec", xPos, yPos, navecImage, navecDamage, navecHP);
         this.xPos = xPos;
         this.yPos = yPos;
         initializeMovementSpeed(true);
@@ -42,6 +42,11 @@ public class Demon extends Enemy{
     @Override
     public Image getImage() {
         return (isFaceRight) ? FACE_RIGHT : FACE_LEFT;
+    }
+
+    @Override
+    public int getHPPercent() {
+        return (int) Math.round(healthPoints*100.0/MAX_HP);
     }
 
     private void initializeMovementSpeed(boolean isNavec) {

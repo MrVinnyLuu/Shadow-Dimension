@@ -29,9 +29,6 @@ public abstract class PlayableCharacter extends Rectangle {
 
     public abstract String getName();
 
-    /**
-     * Method returns the correct facing image
-     */
     public abstract Image getImage();
 
     public void updatePlayerState() {

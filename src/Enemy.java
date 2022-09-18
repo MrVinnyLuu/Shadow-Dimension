@@ -6,16 +6,26 @@ public abstract class Enemy extends Rectangle {
     private final int damage;
     private final String enemyType;
     private boolean isExhausted = false;
+    protected int healthPoints;
 
-    public Enemy(String enemyType, double xPos, double yPos, Image referenceImage, int damage) {
+    public Enemy(String enemyType, double xPos, double yPos, Image referenceImage, int damage, int healthPoints) {
         super(xPos, yPos, referenceImage.getWidth(), referenceImage.getHeight());
         this.enemyType = enemyType;
         this.damage = damage;
+        this.healthPoints = healthPoints;
     }
 
-    public abstract void updateState();
+    public void updateState() {
+        return;
+    }
 
-    public abstract void reverseMovement();
+    public void reverseMovement() {
+        return;
+    }
+
+    public int getHPPercent() {
+        return -1;
+    }
 
     public void dealsDamage(PlayableCharacter player) {
         player.takesDamage(damage);
