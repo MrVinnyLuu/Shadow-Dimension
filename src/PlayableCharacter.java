@@ -13,7 +13,7 @@ public abstract class PlayableCharacter extends Rectangle {
     // Set initial health to maximum health
     private int healthPoints = MAX_HP;
     protected boolean isFaceRight = true, isAttacking = false, isInvincible = false;
-    private double attackTimer = 0, cooldownTimer = 0, invincibilityTimer = 0;
+    private double attackTimer = 0, cooldownTimer = COOLDOWN_DURATION, invincibilityTimer = 0;
     // x and y coordinates refers to the top left corner
     private double xPos, yPos, prevX, prevY;
 
@@ -35,13 +35,17 @@ public abstract class PlayableCharacter extends Rectangle {
     public abstract Image getImage();
 
     public void checkPlayerState(Input input) {
+
         controlCharacter(input);
+
+        cooldownTimer += 1.0/ShadowDimension.REFRESH_RATE;
 
         if (isAttacking) {
             attackTimer += 1.0/ShadowDimension.REFRESH_RATE;
             if (attackTimer >= ATTACK_DURATION) {
                 isAttacking = false;
                 attackTimer = 0;
+                cooldownTimer = 0;
             }
         }
 
@@ -52,7 +56,7 @@ public abstract class PlayableCharacter extends Rectangle {
      */
     public void controlCharacter(Input input) {
 
-        if (input.isDown(Keys.A)) {
+        if (input.isDown(Keys.A) && cooldownTimer >= COOLDOWN_DURATION) {
             isAttacking = true;
         }
 

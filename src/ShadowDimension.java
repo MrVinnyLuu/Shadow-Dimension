@@ -127,6 +127,10 @@ public class ShadowDimension extends AbstractGame {
                     enemies.add(new Demon(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;
+                case "Navec":
+                    enemies.add(new Navec(Double.parseDouble(row[DATA_X_COL]),
+                            Double.parseDouble(row[DATA_Y_COL])));
+                    break;
                 case "Wall":
                     obstacles.add(new Obstacle(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL]), WALL_IMAGE));
