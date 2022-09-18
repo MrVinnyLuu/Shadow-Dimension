@@ -4,49 +4,57 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-public class PlayableCharacter extends Rectangle {
+public abstract class PlayableCharacter extends Rectangle {
 
-    // Assume that every playable character has 0 to 100 HP and moves at 2 pixels per frame
-    private final static int MAX_HP = 100;
-    private final static int MIN_HP = 0;
+    private final static int MAX_HP = 100, MIN_HP = 0;
     private final static double PLAYER_STEP = 2;
-
-    private final String name;
-    private final Image leftImage, rightImage;
+    private final static double ATTACK_DURATION = 1, COOLDOWN_DURATION = 2, INVINCIBILITY_DURATION = 3;
 
     // Set initial health to maximum health
     private int healthPoints = MAX_HP;
-    private boolean isFaceRight = true;
+    protected boolean isFaceRight = true, isAttacking = false, isInvincible = false;
+    private double attackTimer = 0, cooldownTimer = 0, invincibilityTimer = 0;
     // x and y coordinates refers to the top left corner
     private double xPos, yPos, prevX, prevY;
 
-    public PlayableCharacter (String name, double startingX, double startingY, Image leftImage, Image rightImage) {
+
+    public PlayableCharacter (double startingX, double startingY, Image referenceImage) {
         // Dimensions taken from the pixel size of leftImage which is assumed to be same as rightImage
-        super(startingX, startingY, leftImage.getWidth(), leftImage.getHeight());
+        super(startingX, startingY, referenceImage.getWidth(), referenceImage.getHeight());
         this.xPos = startingX;
         this.yPos = startingY;
         prevX = startingX;
         prevY = startingY;
-        this.name = name;
-        this.leftImage = leftImage;
-        this.rightImage = rightImage;
     }
 
-    public String getName() {
-        return name;
-    }
+    public abstract String getName();
 
     /**
      * Method returns the correct facing image
      */
-    public Image getImage() {
-        return (isFaceRight) ? rightImage : leftImage;
+    public abstract Image getImage();
+
+    public void checkPlayerState(Input input) {
+        controlCharacter(input);
+
+        if (isAttacking) {
+            attackTimer += 1.0/ShadowDimension.REFRESH_RATE;
+            if (attackTimer >= ATTACK_DURATION) {
+                isAttacking = false;
+                attackTimer = 0;
+            }
+        }
+
     }
 
     /**
      * Method takes user input and correspondingly moves the character
      */
     public void controlCharacter(Input input) {
+
+        if (input.isDown(Keys.A)) {
+            isAttacking = true;
+        }
 
         // Two separate 'if-else' statements so that player can move diagonally, but not left-right or up-down
         // at the same time.

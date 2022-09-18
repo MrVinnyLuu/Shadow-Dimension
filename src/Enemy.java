@@ -7,8 +7,8 @@ public abstract class Enemy extends Rectangle {
     private final String enemyType;
     private boolean isExhausted = false;
 
-    public Enemy(String enemyType, double xPos, double yPos, Image displayImage, int damage) {
-        super(xPos, yPos, displayImage.getWidth(), displayImage.getHeight());
+    public Enemy(String enemyType, double xPos, double yPos, Image referenceImage, int damage) {
+        super(xPos, yPos, referenceImage.getWidth(), referenceImage.getHeight());
         this.enemyType = enemyType;
         this.damage = damage;
     }

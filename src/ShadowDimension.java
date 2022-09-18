@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class ShadowDimension extends AbstractGame {
 
     /* Display Constants */
-    private final static int REFRESH_RATE = 144;
+    public final static int REFRESH_RATE = 144;
     private final static int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
     private final Image LVL0_BACKGROUND = new Image("res/background0.png");
@@ -67,11 +67,6 @@ public class ShadowDimension extends AbstractGame {
     private final Image WALL_IMAGE = new Image("res/wall.png");
     private final Image TREE_IMAGE = new Image("res/tree.png");
 
-    /* Fae Constants */
-    private final static String CHARACTER_NAME = "Fae";
-    private final Image CHARACTER_FACE_LEFT = new Image("res/fae/faeLeft.png");
-    private final Image CHARACTER_FACE_RIGHT = new Image("res/fae/faeRight.png");
-
     /* Attributes */
     private int gameState = GAME_START;
     private int currentLevel = 0;
@@ -99,17 +94,21 @@ public class ShadowDimension extends AbstractGame {
 
         ArrayList<String[]> csvData = readCSV();
 
-        if (currentLevel == 0) {
-            // Initialize playerFae using the first row of the CSV data as per assignment specifications
-            player = new PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData.get(0)[DATA_X_COL]),
-                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]), CHARACTER_FACE_LEFT, CHARACTER_FACE_RIGHT);
-        } else {
-            enemies.clear();
-            obstacles.clear();
-            player.resetHP();
-            player.setPosition(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
-                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
-        }
+        enemies.clear();
+        obstacles.clear();
+        player = new FaeCharacter(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+                Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
+//        if (currentLevel == 0) {
+//            // Initialize playerFae using the first row of the CSV data as per assignment specifications
+//            player = new PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+//                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]), CHARACTER_FACE_LEFT, CHARACTER_FACE_RIGHT);
+//        } else {
+//            enemies.clear();
+//            obstacles.clear();
+//            player.resetHP();
+//            player.setPosition(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+//                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
+//        }
 
         // Set the boundaries using the last two rows of the CSV data as per assignment specifications
         bottomRightCorner = new Point(Double.parseDouble(csvData.get(csvData.size()-1)[DATA_X_COL]),
@@ -222,7 +221,12 @@ public class ShadowDimension extends AbstractGame {
     private void displayGame() {
 
         // Display the background
-        LVL0_BACKGROUND.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
+        if (currentLevel == 0) {
+            LVL0_BACKGROUND.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
+        } else if (currentLevel == 1) {
+            LVL1_BACKGROUND.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
+        }
+
 
         // Display the HP
         Colour HP_colour;
@@ -292,7 +296,11 @@ public class ShadowDimension extends AbstractGame {
      */
     private void checkGameState(Input input) {
 
-        if ((gameState == GAME_START || gameState == START_LVL1) && input.wasPressed(Keys.SPACE)) {
+        if (gameState == GAME_START && input.wasPressed(Keys.W)) {
+            currentLevel = 1;
+            initializeLevel();
+            gameState = GAME_PLAY;
+        } else if ((gameState == GAME_START || gameState == START_LVL1) && input.wasPressed(Keys.SPACE)) {
             initializeLevel();
             gameState = GAME_PLAY;
         // Lose condition: Player HP reaches its minimum
@@ -319,7 +327,7 @@ public class ShadowDimension extends AbstractGame {
         checkGameState(input);
 
         if (gameState == GAME_PLAY) {
-            player.controlCharacter(input);
+            player.checkPlayerState(input);
             detectCollisions();
             displayGame();
         } else {
