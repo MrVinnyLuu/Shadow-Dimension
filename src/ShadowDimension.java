@@ -317,13 +317,13 @@ public class ShadowDimension extends AbstractGame {
                 enemyA.reverseMovement();
             }
 
-            // Check if an enemy has collided with another enemy
-            for (Enemy enemyB: enemies) {
-                if (enemyA.intersects(enemyB) && enemyA != enemyB) {
-                    enemyA.reverseMovement();
-
-                }
-            }
+//            // Check if an enemy has collided with another enemy
+//            for (Enemy enemyB: enemies) {
+//                if (enemyA.intersects(enemyB) && enemyA != enemyB) {
+//                    enemyA.reverseMovement();
+//
+//                }
+//            }
 
             // Check if player has collided with a sinkhole
             if (enemyA.getType().equals("Sinkhole") && enemyA.intersects(player)) {
