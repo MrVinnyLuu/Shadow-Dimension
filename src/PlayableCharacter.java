@@ -4,6 +4,8 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
+import java.util.Objects;
+
 public abstract class PlayableCharacter extends Rectangle {
 
     private final static int MAX_HP = 100, MIN_HP = 0;
@@ -42,6 +44,14 @@ public abstract class PlayableCharacter extends Rectangle {
                 isAttacking = false;
                 attackTimer = 0;
                 cooldownTimer = 0;
+            }
+        }
+
+        if (isInvincible) {
+            invincibilityTimer += 1.0/ShadowDimension.REFRESH_RATE;
+            if (invincibilityTimer >= INVINCIBILITY_DURATION) {
+                isInvincible = false;
+                invincibilityTimer = 0;
             }
         }
 
@@ -133,10 +143,16 @@ public abstract class PlayableCharacter extends Rectangle {
      * Method lowers the character's health points according to "damage"
      */
     public void takesDamage(String attacker, int damage) {
+
+        if (isInvincible) return;
+        if (!attacker.equals("Sinkhole")) isInvincible = true;
+
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
+
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
                 attacker, damage, getName(), getName(), healthPoints, MAX_HP);
+
     }
 
     public void dealsDamage(Enemy target) {

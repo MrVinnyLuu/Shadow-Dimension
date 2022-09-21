@@ -191,14 +191,13 @@ public class Demon extends Enemy {
     public void takesDamage(String attacker, int damage) {
 
         if (isInvincible) return;
+        isInvincible = true;
 
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
 
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
                 attacker, damage, getType(), getType(), healthPoints, getMaxHP());
-
-        isInvincible = true;
 
     }
 
