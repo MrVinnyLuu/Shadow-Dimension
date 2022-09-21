@@ -1,3 +1,6 @@
+package Enemies;
+
+import Characters.PlayableCharacter;
 import bagel.Image;
 
 public class Sinkhole extends Enemy {

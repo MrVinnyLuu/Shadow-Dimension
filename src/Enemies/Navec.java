@@ -1,4 +1,5 @@
-import bagel.DrawOptions;
+package Enemies;
+
 import bagel.Image;
 
 public class Navec extends Demon {

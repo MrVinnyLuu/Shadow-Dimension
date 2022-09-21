@@ -51,10 +51,10 @@ Wall,690,15
 Wall,760,75
 Wall,830,135
 Wall,890,195
-Sinkhole,255,655
-Sinkhole,960,250
-Sinkhole,550,550
-Sinkhole,450,150
-Sinkhole,58,240
+Enemies.Sinkhole,255,655
+Enemies.Sinkhole,960,250
+Enemies.Sinkhole,550,550
+Enemies.Sinkhole,450,150
+Enemies.Sinkhole,58,240
 TopLeft,0,0
 BottomRight,984,709

@@ -1,3 +1,7 @@
+package Characters;
+
+import ShadowDimension.ShadowDimension;
+import Enemies.Enemy;
 import bagel.Image;
 import bagel.Input;
 import bagel.Keys;
@@ -33,11 +37,11 @@ public abstract class PlayableCharacter extends Rectangle {
 
     private void updateState() {
 
-        cooldownTimer += 1.0/ShadowDimension.REFRESH_RATE;
+        cooldownTimer += 1.0/ ShadowDimension.REFRESH_RATE;
 
         if (isAttacking) {
 
-            attackTimer += 1.0/ShadowDimension.REFRESH_RATE;
+            attackTimer += 1.0/ ShadowDimension.REFRESH_RATE;
             if (attackTimer >= ATTACK_DURATION) {
                 isAttacking = false;
                 attackTimer = 0;
@@ -46,7 +50,7 @@ public abstract class PlayableCharacter extends Rectangle {
         }
 
         if (isInvincible) {
-            invincibilityTimer += 1.0/ShadowDimension.REFRESH_RATE;
+            invincibilityTimer += 1.0/ ShadowDimension.REFRESH_RATE;
             if (invincibilityTimer >= INVINCIBILITY_DURATION) {
                 isInvincible = false;
                 invincibilityTimer = 0;
@@ -145,7 +149,7 @@ public abstract class PlayableCharacter extends Rectangle {
     public void takesDamage(String attacker, int damage) {
 
         if (isInvincible) return;
-        if (!attacker.equals("Sinkhole")) isInvincible = true;
+        if (!attacker.equals("Enemies.Sinkhole")) isInvincible = true;
 
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);

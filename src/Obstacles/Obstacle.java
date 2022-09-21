@@ -1,3 +1,5 @@
+package Obstacles;
+
 import bagel.Image;
 import bagel.util.Rectangle;
 

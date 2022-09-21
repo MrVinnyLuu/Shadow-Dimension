@@ -1,3 +1,8 @@
+package ShadowDimension;
+
+import Characters.*;
+import Enemies.*;
+import Obstacles.*;
 import bagel.*;
 import bagel.util.Point;
 import bagel.util.Colour;
@@ -105,7 +110,7 @@ public class ShadowDimension extends AbstractGame {
                 Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
 //        if (currentLevel == 0) {
 //            // Initialize playerFae using the first row of the CSV data as per assignment specifications
-//            player = new PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+//            player = new Characters.PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData.get(0)[DATA_X_COL]),
 //                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]), CHARACTER_FACE_LEFT, CHARACTER_FACE_RIGHT);
 //        } else {
 //            enemies.clear();
@@ -124,15 +129,15 @@ public class ShadowDimension extends AbstractGame {
         // Populate obstacles & enemies using the rest of the rows of the CSV data
         for (String[] row : csvData) {
             switch (row[DATA_NAME_COL]) {
-                case "Sinkhole":
+                case "Enemies.Sinkhole":
                     enemies.add(new Sinkhole(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;
-                case "Demon":
+                case "Enemies.Demon":
                     enemies.add(new Demon(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;
-                case "Navec":
+                case "Enemies.Navec":
                     enemies.add(new Navec(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;

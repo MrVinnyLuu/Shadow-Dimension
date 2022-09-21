@@ -1,9 +1,12 @@
+package Enemies;
+
+import ShadowDimension.ShadowDimension;
+import Characters.PlayableCharacter;
 import bagel.DrawOptions;
 import bagel.Image;
 import bagel.util.Rectangle;
 import bagel.util.Point;
 
-import java.awt.*;
 import java.util.Random;
 
 public class Demon extends Enemy {
@@ -133,7 +136,7 @@ public class Demon extends Enemy {
 
     private void initializeMovementSpeed(boolean isNavec) {
 
-        // 50% chance to be aggressive (Navec is always aggressive)
+        // 50% chance to be aggressive (Enemies.Navec is always aggressive)
         if (RAND.nextBoolean() || isNavec) {
             // 50% chance to move up and down. 50% chance to move left and right
             if (RAND.nextBoolean()) {
@@ -154,7 +157,7 @@ public class Demon extends Enemy {
         if (healthPoints <= MIN_HP) isExhausted = true;
 
         if (isInvincible) {
-            invincibilityTimer += 1.0/ShadowDimension.REFRESH_RATE;
+            invincibilityTimer += 1.0/ ShadowDimension.REFRESH_RATE;
             if (invincibilityTimer >= INVINCIBILITY_DURATION) {
                 isInvincible = false;
                 invincibilityTimer = 0;

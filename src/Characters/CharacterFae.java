@@ -1,3 +1,5 @@
+package Characters;
+
 import bagel.Image;
 
 public class CharacterFae extends PlayableCharacter{
