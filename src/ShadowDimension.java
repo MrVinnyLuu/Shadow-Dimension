@@ -281,21 +281,18 @@ public class ShadowDimension extends AbstractGame {
                 return;
             }
 
-            if (player.isAttacking() && player.intersects(anEnemy)) {
-                player.dealsDamage(anEnemy);
-            }
-
             // Check if enemy has collided with the bounds
             if (bottomRightCorner.x < anEnemy.topLeft().x || anEnemy.topLeft().x < topLeftCorner.x
                     || bottomRightCorner.y < anEnemy.topLeft().y || anEnemy.topLeft().y < topLeftCorner.y) {
                 anEnemy.reverseMovement();
             }
 
-            // Check if player has collided with a sinkhole
-            if (anEnemy.getType().equals("Sinkhole") && anEnemy.intersects(player)) {
-                anEnemy.dealsDamage(player);
-                player.xPosRollback();
-                player.yPosRollback();
+            if (player.isAttacking() && player.intersects(anEnemy)) {
+                player.dealsDamage(anEnemy);
+            }
+
+            if (anEnemy.centre().distanceTo(player.centre()) <= anEnemy.getAttackRadius()) {
+                anEnemy.attack(player);
             }
 
         }
@@ -380,8 +377,8 @@ public class ShadowDimension extends AbstractGame {
         if (gameState == GAME_PLAY) {
             player.controlCharacter(input);
             detectCollisions();
-            updateEnemyStates();
             displayGame();
+            updateEnemyStates();
         } else {
             displayScreen();
         }

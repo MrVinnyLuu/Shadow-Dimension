@@ -1,11 +1,10 @@
+import bagel.DrawOptions;
 import bagel.Image;
 import bagel.util.Point;
 
 import java.util.Random;
 
 public class Demon extends Enemy {
-
-    private static int speed;
 
     protected final static int MAX_HP = 40;
     protected final static int MIN_HP = 0;
@@ -33,19 +32,46 @@ public class Demon extends Enemy {
     private double horizontalSpeed = 0, verticalSpeed = 0;
     protected boolean isFaceRight, isInvincible = false;
     private double invincibilityTimer = 0;
+    protected int healthPoints;
+    private boolean isExhausted = false;
 
     public Demon (double xPos, double yPos) {
-        super("Demon", xPos, yPos, FACE_LEFT, DAMAGE, MAX_HP);
+        super("Demon", xPos, yPos, FACE_LEFT);
         this.xPos = xPos;
         this.yPos = yPos;
+        healthPoints = MAX_HP;
         initializeMovementSpeed(false);
     }
 
-    public Demon (double xPos, double yPos, Image navecImage, int navecDamage, int navecHP) {
-        super("Navec", xPos, yPos, navecImage, navecDamage, navecHP);
+    public Demon (double xPos, double yPos, Image navecImage, int navecHP) {
+        super("Navec", xPos, yPos, navecImage);
         this.xPos = xPos;
         this.yPos = yPos;
+        healthPoints = navecHP;
         initializeMovementSpeed(true);
+    }
+
+    @Override
+    public double getAttackRadius() {
+        return ATTACK_RADIUS;
+    }
+
+    @Override
+    public void attack(PlayableCharacter player) {
+        if (player.centre().x <= centre().x && player.centre().y <= centre().y) {
+            FIRE.drawFromTopLeft(topLeft().x - FIRE.getWidth(), topLeft().y - FIRE.getHeight(),
+                    new DrawOptions().setRotation(0));
+        } else if (player.centre().x <= centre().x && player.centre().y > centre().y) {
+            FIRE.drawFromTopLeft(bottomLeft().x - FIRE.getWidth(), bottomLeft().y,
+                    new DrawOptions().setRotation(-Math.PI/2));
+        } else if (player.centre().x > centre().x && player.centre().y <= centre().y) {
+            FIRE.drawFromTopLeft(topRight().x, topRight().y - FIRE.getHeight(),
+                    new DrawOptions().setRotation(Math.PI/2));
+        } else if (player.centre().x > centre().x && player.centre().y > centre().y) {
+            FIRE.drawFromTopLeft(bottomRight().x, bottomRight().y,
+                    new DrawOptions().setRotation(Math.PI));
+        }
+
     }
 
     @Override
@@ -63,7 +89,7 @@ public class Demon extends Enemy {
 
     @Override
     public int getHPPercent() {
-        return (int) Math.round(healthPoints*100.0/MAX_HP);
+        return (int) Math.round(healthPoints*100.0/getMaxHP());
     }
 
     public int getMaxHP() {
@@ -90,8 +116,7 @@ public class Demon extends Enemy {
 
     @Override
     public void updateState() {
-
-        if (healthPoints <= MIN_HP) exhaust();
+        if (healthPoints <= MIN_HP) isExhausted = true;
 
         if (isInvincible) {
             invincibilityTimer += 1.0/ShadowDimension.REFRESH_RATE;
@@ -139,6 +164,11 @@ public class Demon extends Enemy {
 
         isInvincible = true;
 
+    }
+
+    @Override
+    public boolean isExhausted() {
+        return isExhausted;
     }
 
     public static void changeSpeedMultiplier(int timescaleStep) {

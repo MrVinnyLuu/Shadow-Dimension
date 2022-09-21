@@ -7,11 +7,15 @@
     <list default="true" id="cc5d9ee8-8ff0-4fb7-bb6a-d6a5a2134e92" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Demon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Demon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FaeCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FaeCharacter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Navec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Navec.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ShadowDimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShadowDimension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sinkhole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sinkhole.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Demon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Demon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FaeCharacter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/FaeCharacter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Enemy.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Enemy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Navec.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Navec.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ShadowDimension.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ShadowDimension.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Sinkhole.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Sinkhole.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,3 +1,4 @@
+import bagel.DrawOptions;
 import bagel.Image;
 
 public class Navec extends Demon {
@@ -13,7 +14,29 @@ public class Navec extends Demon {
     private final static Image NAVEC_FIRE = new Image("res/navec/navecFire.png");
 
     public Navec(double xPos, double yPos) {
-        super(xPos, yPos, NAVEC_FACE_LEFT, NAVEC_DAMAGE, NAVEC_MAX_HP);
+        super(xPos, yPos, NAVEC_FACE_LEFT, NAVEC_MAX_HP);
+    }
+
+    @Override
+    public double getAttackRadius() {
+        return NAVEC_ATTACK_RADIUS;
+    }
+
+    @Override
+    public void attack(PlayableCharacter player) {
+        if (player.centre().x <= centre().x && player.centre().y <= centre().y) {
+            NAVEC_FIRE.drawFromTopLeft(topLeft().x - NAVEC_FIRE.getWidth(), topLeft().y - NAVEC_FIRE.getHeight(),
+                    new DrawOptions().setRotation(0));
+        } else if (player.centre().x <= centre().x && player.centre().y > centre().y) {
+            NAVEC_FIRE.drawFromTopLeft(bottomLeft().x - NAVEC_FIRE.getWidth(), bottomLeft().y,
+                    new DrawOptions().setRotation(-Math.PI/2));
+        } else if (player.centre().x > centre().x && player.centre().y <= centre().y) {
+            NAVEC_FIRE.drawFromTopLeft(topRight().x, topRight().y - NAVEC_FIRE.getHeight(),
+                    new DrawOptions().setRotation(Math.PI/2));
+        } else if (player.centre().x > centre().x && player.centre().y > centre().y) {
+            NAVEC_FIRE.drawFromTopLeft(bottomRight().x, bottomRight().y,
+                    new DrawOptions().setRotation(Math.PI));
+        }
     }
 
     @Override
@@ -27,11 +50,6 @@ public class Navec extends Demon {
         } else {
             return NAVEC_FACE_LEFT;
         }
-    }
-
-    @Override
-    public int getHPPercent() {
-        return (int) Math.round(super.healthPoints*100.0/NAVEC_MAX_HP);
     }
 
     @Override
