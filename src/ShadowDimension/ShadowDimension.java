@@ -11,7 +11,7 @@ import java.io.BufferedReader;
 import java.util.ArrayList;
 
 /**
- * SWEN20003 Project 1, Semester 2, 2022
+ * SWEN20003 Project 2, Semester 2, 2022
  * Vincent Luu, 1269979
  */
 
@@ -74,8 +74,6 @@ public class ShadowDimension extends AbstractGame {
     /* Game Object Constants */
     private final static ArrayList<Enemy> enemies = new ArrayList<>();
     private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
-    private final Image WALL_IMAGE = new Image("res/wall.png");
-    private final Image TREE_IMAGE = new Image("res/tree.png");
 
     /* Attributes */
     private int gameState = GAME_START;
@@ -129,25 +127,23 @@ public class ShadowDimension extends AbstractGame {
         // Populate obstacles & enemies using the rest of the rows of the CSV data
         for (String[] row : csvData) {
             switch (row[DATA_NAME_COL]) {
-                case "Enemies.Sinkhole":
+                case "Sinkhole":
                     enemies.add(new Sinkhole(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;
-                case "Enemies.Demon":
+                case "Demon":
                     enemies.add(new Demon(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;
-                case "Enemies.Navec":
+                case "Navec":
                     enemies.add(new Navec(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;
                 case "Wall":
-                    obstacles.add(new Obstacle(Double.parseDouble(row[DATA_X_COL]),
-                            Double.parseDouble(row[DATA_Y_COL]), WALL_IMAGE));
+                    obstacles.add(new Wall(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL])));
                     break;
                 case "Tree":
-                    obstacles.add(new Obstacle(Double.parseDouble(row[DATA_X_COL]),
-                            Double.parseDouble(row[DATA_Y_COL]), TREE_IMAGE));
+                    obstacles.add(new Tree(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL])));
                     break;
             }
         }

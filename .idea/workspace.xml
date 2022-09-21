@@ -5,25 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc5d9ee8-8ff0-4fb7-bb6a-d6a5a2134e92" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Obstacles/Tree.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Obstacles/Wall.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/level0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/res/level0.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/level1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/res/level1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CharacterFae.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Characters/CharacterFae.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Demon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Demon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Navec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Navec.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Obstacle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Obstacle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PlayableCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Characters/PlayableCharacter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ShadowDimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sinkhole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Sinkhole.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Demon.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Enemy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/FaeCharacter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Navec.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Obstacle.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/PlayableCharacter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ShadowDimension.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Sinkhole.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ShadowDimension/ShadowDimension.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ShadowDimension/ShadowDimension.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
