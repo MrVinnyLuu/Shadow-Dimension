@@ -11,6 +11,8 @@ public class FaeCharacter extends PlayableCharacter{
         super(startingX, startingY, FACE_LEFT);
     }
 
+    /////////////////// Attack image is different size
+
     @Override
     public Image getImage() {
        if (isFaceRight() && isAttacking()) {

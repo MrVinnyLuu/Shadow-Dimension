@@ -66,6 +66,8 @@ public class ShadowDimension extends AbstractGame {
 
     /* Game Object Constants */
     private final static ArrayList<Enemy> enemies = new ArrayList<>();
+    private final static int SPEED_INCREASE = 1;
+    private final static int SPEED_DECREASE = -1;
     private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
     private final Image WALL_IMAGE = new Image("res/wall.png");
     private final Image TREE_IMAGE = new Image("res/tree.png");
@@ -242,10 +244,11 @@ public class ShadowDimension extends AbstractGame {
         // Display the enemies
         for (Enemy anEnemy : enemies) {
             anEnemy.getImage().draw(anEnemy.centre().x, anEnemy.centre().y);
-            if (anEnemy.getHPPercent() < 0) continue;
-            ENEMY_HP_TEXT.drawString(String.format("%d%%", anEnemy.getHPPercent()), anEnemy.topLeft().x,
-                    anEnemy.topLeft().y + ENEMY_HP_TEXT_Y_OFFSET,
-                    new DrawOptions().setBlendColour(getHPColour(anEnemy.getHPPercent())));
+            if (anEnemy.getHPPercent() >= 0) {
+                ENEMY_HP_TEXT.drawString(String.format("%d%%", anEnemy.getHPPercent()), anEnemy.topLeft().x,
+                        anEnemy.topLeft().y + ENEMY_HP_TEXT_Y_OFFSET,
+                        new DrawOptions().setBlendColour(getHPColour(anEnemy.getHPPercent())));
+            }
         }
 
         // Display the player
@@ -268,11 +271,37 @@ public class ShadowDimension extends AbstractGame {
     }
 
     private void updateEnemyStates() {
-        for (Enemy anEnemy: enemies) {
+
+        for (Enemy anEnemy : enemies) {
+
             anEnemy.updateState();
-            if (anEnemy.getType().equals("Navec") && anEnemy.isExhausted()) gameState = GAME_WIN;
+
+            if (anEnemy.getType().equals("Navec") && anEnemy.isExhausted()) {
+                gameState = GAME_WIN;
+                return;
+            }
+
+            if (player.isAttacking() && player.intersects(anEnemy)) {
+                player.dealsDamage(anEnemy);
+            }
+
+            // Check if enemy has collided with the bounds
+            if (bottomRightCorner.x < anEnemy.topLeft().x || anEnemy.topLeft().x < topLeftCorner.x
+                    || bottomRightCorner.y < anEnemy.topLeft().y || anEnemy.topLeft().y < topLeftCorner.y) {
+                anEnemy.reverseMovement();
+            }
+
+            // Check if player has collided with a sinkhole
+            if (anEnemy.getType().equals("Sinkhole") && anEnemy.intersects(player)) {
+                anEnemy.dealsDamage(player);
+                player.xPosRollback();
+                player.yPosRollback();
+            }
+
         }
+
         enemies.removeIf(Enemy::isExhausted);
+
     }
 
     /**
@@ -305,41 +334,18 @@ public class ShadowDimension extends AbstractGame {
 
         }
 
-        for (Enemy enemyA: enemies) {
-
-            if (player.isAttacking() && player.intersects(enemyA)) {
-                player.dealsDamage(enemyA);
-            }
-
-            // Check if enemy has collided with the bounds
-            if (bottomRightCorner.x < enemyA.topLeft().x || enemyA.topLeft().x < topLeftCorner.x
-                || bottomRightCorner.y < enemyA.topLeft().y || enemyA.topLeft().y < topLeftCorner.y) {
-                enemyA.reverseMovement();
-            }
-
-//            // Check if an enemy has collided with another enemy
-//            for (Enemy enemyB: enemies) {
-//                if (enemyA.intersects(enemyB) && enemyA != enemyB) {
-//                    enemyA.reverseMovement();
-//
-//                }
-//            }
-
-            // Check if player has collided with a sinkhole
-            if (enemyA.getType().equals("Sinkhole") && enemyA.intersects(player)) {
-                enemyA.dealsDamage(player);
-                player.xPosRollback();
-                player.yPosRollback();
-            }
-
-        }
-
     }
 
     /**
      * Method checks what state the game should be in
      */
     private void updateGameState(Input input) {
+
+        if (gameState == GAME_PLAY && currentLevel == 1 && input.wasPressed(Keys.L)) {
+            Demon.changeSpeedMultiplier(SPEED_INCREASE);
+        } else if (gameState == GAME_PLAY && currentLevel == 1 && input.wasPressed(Keys.K)) {
+            Demon.changeSpeedMultiplier(SPEED_DECREASE);
+        }
 
         if (gameState == GAME_START && input.wasPressed(Keys.W)) {
             currentLevel = 1;

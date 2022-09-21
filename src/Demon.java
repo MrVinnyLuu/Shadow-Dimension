@@ -5,6 +5,8 @@ import java.util.Random;
 
 public class Demon extends Enemy {
 
+    private static int speed;
+
     protected final static int MAX_HP = 40;
     protected final static int MIN_HP = 0;
     protected final static int DAMAGE = 10;
@@ -19,6 +21,11 @@ public class Demon extends Enemy {
 
     private final static double MAX_BASE_SPEED = 0.2;
     private final static double MIN_BASE_SPEED = 0.7;
+
+    private final static double SPEED_MULTIPLIER = 0.5;
+    private final static double MAX_POS_TIMESCALE = 3;
+    private final static double MAX_NEG_TIMESCALE = -3;
+    private static double timescale = 0;
 
     private final Random RAND = new Random();
 
@@ -94,18 +101,29 @@ public class Demon extends Enemy {
             }
         }
 
-        xPos += horizontalSpeed;
-        yPos += verticalSpeed;
+        double horizontalDisplacement = horizontalSpeed, verticalDisplacement = verticalSpeed;
+        if (timescale > 0) {
+            horizontalDisplacement = horizontalSpeed*Math.pow(1+SPEED_MULTIPLIER, timescale);
+            verticalDisplacement = verticalSpeed*Math.pow(1+SPEED_MULTIPLIER, timescale);
+        } else if (timescale < 0) {
+            horizontalDisplacement = horizontalSpeed*Math.pow(1-SPEED_MULTIPLIER, -timescale);
+            verticalDisplacement = verticalSpeed*Math.pow(1-SPEED_MULTIPLIER, -timescale);
+        }
+
+        xPos += horizontalDisplacement;
+        yPos += verticalDisplacement;
         super.moveTo(new Point(xPos, yPos));
 
     }
 
     @Override
     public void reverseMovement() {
-//        if (horizontalSpeed != 0) isFaceRight = !isFaceRight;
-        isFaceRight = !isFaceRight;
-        horizontalSpeed *= -1;
-        verticalSpeed *= -1;
+        if (horizontalSpeed != 0) {
+            isFaceRight = !isFaceRight;
+            horizontalSpeed *= -1;
+        } else if (verticalSpeed != 0) {
+            verticalSpeed *= -1;
+        }
     }
 
     @Override
@@ -115,9 +133,23 @@ public class Demon extends Enemy {
 
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
+
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
                 attacker, damage, getType(), getType(), healthPoints, getMaxHP());
+
         isInvincible = true;
+
+    }
+
+    public static void changeSpeedMultiplier(int timescaleStep) {
+
+        if (timescaleStep > 0 && timescale < MAX_POS_TIMESCALE) {
+            timescale += timescaleStep;
+            System.out.format("Sped up, Speed: " + timescale + "\n");
+        } else if (timescaleStep < 0 && timescale > MAX_NEG_TIMESCALE) {
+            timescale += timescaleStep;
+            System.out.format("Slowed down, Speed: " + timescale + "\n");
+        }
 
     }
 
