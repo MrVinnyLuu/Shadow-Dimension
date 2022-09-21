@@ -4,8 +4,6 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-import java.util.Objects;
-
 public abstract class PlayableCharacter extends Rectangle {
 
     private final static int MAX_HP = 100, MIN_HP = 0;
@@ -39,6 +37,7 @@ public abstract class PlayableCharacter extends Rectangle {
         cooldownTimer += 1.0/ShadowDimension.REFRESH_RATE;
 
         if (isAttacking) {
+
             attackTimer += 1.0/ShadowDimension.REFRESH_RATE;
             if (attackTimer >= ATTACK_DURATION) {
                 isAttacking = false;
@@ -91,6 +90,12 @@ public abstract class PlayableCharacter extends Rectangle {
         // Update the parent Rectangle to reflect movement
         super.moveTo(new Point(xPos, yPos));
 
+    }
+
+    @Override
+    public boolean intersects(Rectangle rectangle) {
+        // Resolves the fact that attack image and normal images are different sizes
+        return new Rectangle(topLeft(), getImage().getWidth(), getImage().getHeight()).intersects(rectangle);
     }
 
     /**

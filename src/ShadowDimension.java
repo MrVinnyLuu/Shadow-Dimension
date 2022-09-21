@@ -318,13 +318,13 @@ public class ShadowDimension extends AbstractGame {
         // Check if player or an enemy has collided with an obstacle
         for (Obstacle anObstacle : obstacles) {
 
-            if (anObstacle.intersects(player)) {
+            if (player.intersects(anObstacle)) {
                 player.xPosRollback();
                 player.yPosRollback();
             }
 
             for (Enemy anEnemy: enemies) {
-                if (anObstacle.intersects(anEnemy)) {
+                if (anEnemy.intersects(anObstacle)) {
                     anEnemy.reverseMovement();
                 }
             }
