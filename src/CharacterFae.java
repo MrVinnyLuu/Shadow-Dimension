@@ -1,17 +1,21 @@
 import bagel.Image;
 
-public class FaeCharacter extends PlayableCharacter{
+public class CharacterFae extends PlayableCharacter{
 
+    private final static String CHARACTER_NAME = "Fae";
     private final static Image FACE_LEFT = new Image("res/fae/faeLeft.png");
     private final static Image FACE_RIGHT = new Image("res/fae/faeRight.png");
     private final static Image ATTACK_LEFT = new Image("res/fae/faeAttackLeft.png");
     private final static Image ATTACK_RIGHT = new Image("res/fae/faeAttackRight.png");
 
-    public FaeCharacter(double startingX, double startingY) {
+    public CharacterFae(double startingX, double startingY) {
         super(startingX, startingY, FACE_LEFT);
     }
 
-    /////////////////// Attack image is different size
+    @Override
+    protected String getCharacterName() {
+        return CHARACTER_NAME;
+    }
 
     @Override
     public Image getImage() {
@@ -26,9 +30,5 @@ public class FaeCharacter extends PlayableCharacter{
        }
     }
 
-    @Override
-    public String getName() {
-        return "Fae";
-    }
 
 }

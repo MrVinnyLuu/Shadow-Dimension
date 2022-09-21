@@ -9,7 +9,7 @@ import java.util.Random;
 public class Demon extends Enemy {
 
     protected final static int MAX_HP = 40;
-    protected final static int MIN_HP = 0;
+    private final static int MIN_HP = 0;
     protected final static int DAMAGE = 10;
     private final static double ATTACK_RADIUS = 150;
     private final static double INVINCIBILITY_DURATION = 3;
@@ -20,8 +20,8 @@ public class Demon extends Enemy {
     private final static Image INVINCIBLE_RIGHT = new Image("res/demon/demonInvincibleRight.png");
     private final static Image FIRE = new Image("res/demon/demonFire.png");
 
-    private final static double MAX_BASE_SPEED = 0.2;
-    private final static double MIN_BASE_SPEED = 0.7;
+    private final static double MIN_BASE_SPEED = 0.2;
+    private final static double MAX_BASE_SPEED = 0.7;
 
     private final static double SPEED_MULTIPLIER = 0.5;
     private final static double MAX_POS_TIMESCALE = 3;
@@ -35,7 +35,6 @@ public class Demon extends Enemy {
     protected boolean isFaceRight, isInvincible = false;
     private double invincibilityTimer = 0;
     protected int healthPoints;
-    private boolean isExhausted = false;
 
     public Demon (double xPos, double yPos) {
         super("Demon", xPos, yPos, FACE_LEFT);
@@ -199,11 +198,6 @@ public class Demon extends Enemy {
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
                 attacker, damage, getType(), getType(), healthPoints, getMaxHP());
 
-    }
-
-    @Override
-    public boolean isExhausted() {
-        return isExhausted;
     }
 
     public static void changeSpeedMultiplier(int timescaleStep) {

@@ -11,7 +11,6 @@ public abstract class PlayableCharacter extends Rectangle {
     private final static double PLAYER_STEP = 2;
     private final static double ATTACK_DURATION = 1, COOLDOWN_DURATION = 2, INVINCIBILITY_DURATION = 3;
 
-    // Set initial health to maximum health
     private int healthPoints = MAX_HP;
     private boolean isFaceRight = true, isAttacking = false, isInvincible = false;
     private double attackTimer = 0, cooldownTimer = COOLDOWN_DURATION, invincibilityTimer = 0;
@@ -28,11 +27,11 @@ public abstract class PlayableCharacter extends Rectangle {
         prevY = startingY;
     }
 
-    public abstract String getName();
+    protected abstract String getCharacterName();
 
     public abstract Image getImage();
 
-    public void updatePlayerState() {
+    private void updateState() {
 
         cooldownTimer += 1.0/ShadowDimension.REFRESH_RATE;
 
@@ -61,7 +60,7 @@ public abstract class PlayableCharacter extends Rectangle {
      */
     public void controlCharacter(Input input) {
 
-        updatePlayerState();
+        updateState();
 
         if (input.isDown(Keys.A) && cooldownTimer >= COOLDOWN_DURATION) {
             isAttacking = true;
@@ -124,10 +123,6 @@ public abstract class PlayableCharacter extends Rectangle {
         return (int) Math.round(healthPoints*100.0/MAX_HP);
     }
 
-    public static int getMaxHP() {
-        return MAX_HP;
-    }
-
     public static int getMinHP() {
         return MIN_HP;
     }
@@ -156,19 +151,19 @@ public abstract class PlayableCharacter extends Rectangle {
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
 
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
-                attacker, damage, getName(), getName(), healthPoints, MAX_HP);
+                attacker, damage, getCharacterName(), getCharacterName(), healthPoints, MAX_HP);
 
     }
 
     public void dealsDamage(Enemy target) {
-        target.takesDamage(getName(), DAMAGE);
+        target.takesDamage(getCharacterName(), DAMAGE);
     }
 
     public boolean isAttacking() {
         return isAttacking;
     }
 
-    public boolean isFaceRight() {
+    protected boolean isFaceRight() {
         return isFaceRight;
     }
 

@@ -20,7 +20,7 @@ public class ShadowDimension extends AbstractGame {
     private final Image LVL1_BACKGROUND = new Image("res/background1.png");
 
     /* Text and font Constants */
-    private final String FONT_FILENAME = "res/frostbite.ttf";
+    private final static String FONT_FILENAME = "res/frostbite.ttf";
     private final static int STANDARD_FONT_SIZE = 75;
     private final Font STANDARD_TEXT = new Font(FONT_FILENAME, STANDARD_FONT_SIZE);
 
@@ -60,14 +60,14 @@ public class ShadowDimension extends AbstractGame {
     private final static int DATA_NAME_COL = 0, DATA_X_COL = 1, DATA_Y_COL = 2;
 
     /* Game element Constants */
-    private final static int GAME_START = 0, GAME_PLAY = 1, FIN_LVL0 = 2, START_LVL1 = 3;
+    private final static int GAME_START = 0, GAME_PLAY = 1, LVL_FINISH = 2, LVL1_START = 3;
     private final static int GAME_WIN = -1, GAME_LOSE = -2;
     private final static double PORTAL_MIN_X = 950, PORTAL_MIN_Y = 670;
+    private final static int TIMESCALE_INCREASE = 1;
+    private final static int TIMESCALE_DECREASE = -1;
 
     /* Game Object Constants */
     private final static ArrayList<Enemy> enemies = new ArrayList<>();
-    private final static int SPEED_INCREASE = 1;
-    private final static int SPEED_DECREASE = -1;
     private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
     private final Image WALL_IMAGE = new Image("res/wall.png");
     private final Image TREE_IMAGE = new Image("res/tree.png");
@@ -101,7 +101,7 @@ public class ShadowDimension extends AbstractGame {
 
         enemies.clear();
         obstacles.clear();
-        player = new FaeCharacter(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+        player = new CharacterFae(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
                 Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
 //        if (currentLevel == 0) {
 //            // Initialize playerFae using the first row of the CSV data as per assignment specifications
@@ -187,14 +187,14 @@ public class ShadowDimension extends AbstractGame {
             INSTRUCTIONS_TEXT.drawString(MOVE_CTRLS_INSTRUCT,
                     TITLE_X + LVL0_START_X_OFFSET + ctrlsXOffset, TITLE_Y + LVL0_START_Y_OFFSET + LINE_SPACING);
 
-        } else if (gameState == FIN_LVL0) {
+        } else if (gameState == LVL_FINISH) {
 
             lvlCompleteTimer += 1.0/REFRESH_RATE;
             double xPos = WINDOW_WIDTH/2.0 - STANDARD_TEXT.getWidth(LVL_COMPLETE)/2.0;
             double yPos = WINDOW_HEIGHT/2.0 + STANDARD_FONT_SIZE/2.0;
             STANDARD_TEXT.drawString(LVL_COMPLETE, xPos, yPos);
 
-        } else if (gameState == START_LVL1) {
+        } else if (gameState == LVL1_START) {
 
             INSTRUCTIONS_TEXT.drawString(START_INSTRUCTION, LVL1_START_X, LVL1_START_Y);
 
@@ -276,7 +276,7 @@ public class ShadowDimension extends AbstractGame {
 
             anEnemy.updateState();
 
-            if (anEnemy.getType().equals("Navec") && anEnemy.isExhausted()) {
+            if (anEnemy instanceof Navec && anEnemy.isExhausted()) {
                 gameState = GAME_WIN;
                 return;
             }
@@ -293,6 +293,12 @@ public class ShadowDimension extends AbstractGame {
 
             if (anEnemy.centre().distanceTo(player.centre()) <= anEnemy.getAttackRadius()) {
                 anEnemy.attack(player);
+            }
+
+            for (Enemy aSinkhole: enemies) {
+                if (aSinkhole instanceof Sinkhole && anEnemy.intersects(aSinkhole)) {
+                    anEnemy.reverseMovement();
+                }
             }
 
         }
@@ -339,25 +345,25 @@ public class ShadowDimension extends AbstractGame {
     private void updateGameState(Input input) {
 
         if (gameState == GAME_PLAY && currentLevel == 1 && input.wasPressed(Keys.L)) {
-            Demon.changeSpeedMultiplier(SPEED_INCREASE);
+            Demon.changeSpeedMultiplier(TIMESCALE_INCREASE);
         } else if (gameState == GAME_PLAY && currentLevel == 1 && input.wasPressed(Keys.K)) {
-            Demon.changeSpeedMultiplier(SPEED_DECREASE);
+            Demon.changeSpeedMultiplier(TIMESCALE_DECREASE);
         }
 
         if (gameState == GAME_START && input.wasPressed(Keys.W)) {
             currentLevel = 1;
             initializeLevel();
             gameState = GAME_PLAY;
-        } else if ((gameState == GAME_START || gameState == START_LVL1) && input.wasPressed(Keys.SPACE)) {
+        } else if ((gameState == GAME_START || gameState == LVL1_START) && input.wasPressed(Keys.SPACE)) {
             initializeLevel();
             gameState = GAME_PLAY;
         // Level 0 win condition: Player position is in the portal
         } else if (gameState == GAME_PLAY && currentLevel == 0
                 && player.centre().x >= PORTAL_MIN_X && player.centre().y >= PORTAL_MIN_Y) {
-            gameState = FIN_LVL0;
-        } else if (gameState == FIN_LVL0 && currentLevel == 0 && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
+            gameState = LVL_FINISH;
+        } else if (gameState == LVL_FINISH && currentLevel == 0 && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
             currentLevel = 1;
-            gameState = START_LVL1;
+            gameState = LVL1_START;
         // Lose condition: Player HP reaches its minimum
         } else if (gameState == GAME_PLAY && player.getHP() == PlayableCharacter.getMinHP()) {
             gameState = GAME_LOSE;

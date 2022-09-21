@@ -4,19 +4,28 @@ import bagel.util.Rectangle;
 public abstract class Enemy extends Rectangle {
 
     private final String enemyType;
+    protected boolean isExhausted = false;
 
     public Enemy(String enemyType, double xPos, double yPos, Image referenceImage) {
         super(xPos, yPos, referenceImage.getWidth(), referenceImage.getHeight());
         this.enemyType = enemyType;
     }
 
-    public abstract void updateState();
+    public void updateState() {
+        return;
+    }
 
-    public abstract void reverseMovement();
+    public void reverseMovement() {
+        return;
+    }
 
-    public abstract void takesDamage(String attacker, int damage);
+    public void takesDamage(String attacker, int damage) {
+        return;
+    }
 
-    public abstract boolean isExhausted();
+    public boolean isExhausted() {
+        return isExhausted;
+    }
 
     public abstract double getAttackRadius();
 
@@ -26,10 +35,6 @@ public abstract class Enemy extends Rectangle {
 
     public int getHPPercent() {
         return -1;
-    }
-
-    public void  dealsDamage(PlayableCharacter player) {
-        return;
     }
 
     public String getType() {
