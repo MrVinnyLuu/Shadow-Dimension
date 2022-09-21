@@ -1,7 +1,9 @@
 import bagel.DrawOptions;
 import bagel.Image;
+import bagel.util.Rectangle;
 import bagel.util.Point;
 
+import java.awt.*;
 import java.util.Random;
 
 public class Demon extends Enemy {
@@ -58,20 +60,54 @@ public class Demon extends Enemy {
 
     @Override
     public void attack(PlayableCharacter player) {
+
+        double fireX, fireY;
+
         if (player.centre().x <= centre().x && player.centre().y <= centre().y) {
-            FIRE.drawFromTopLeft(topLeft().x - FIRE.getWidth(), topLeft().y - FIRE.getHeight(),
-                    new DrawOptions().setRotation(0));
+
+            fireX = topLeft().x - getAttackImage().getWidth();
+            fireY = topLeft().y - getAttackImage().getHeight();
+
+            getAttackImage().drawFromTopLeft(fireX, fireY, new DrawOptions().setRotation(0));
+
         } else if (player.centre().x <= centre().x && player.centre().y > centre().y) {
-            FIRE.drawFromTopLeft(bottomLeft().x - FIRE.getWidth(), bottomLeft().y,
-                    new DrawOptions().setRotation(-Math.PI/2));
+
+            fireX = bottomLeft().x - getAttackImage().getWidth();
+            fireY = bottomLeft().y;
+
+            getAttackImage().drawFromTopLeft(fireX, fireY, new DrawOptions().setRotation(-Math.PI/2));
+
         } else if (player.centre().x > centre().x && player.centre().y <= centre().y) {
-            FIRE.drawFromTopLeft(topRight().x, topRight().y - FIRE.getHeight(),
-                    new DrawOptions().setRotation(Math.PI/2));
-        } else if (player.centre().x > centre().x && player.centre().y > centre().y) {
-            FIRE.drawFromTopLeft(bottomRight().x, bottomRight().y,
-                    new DrawOptions().setRotation(Math.PI));
+
+            fireX = topRight().x;
+            fireY = topRight().y - getAttackImage().getHeight();
+
+            getAttackImage().drawFromTopLeft(fireX, fireY, new DrawOptions().setRotation(Math.PI/2));
+
+        } else {
+
+            fireX = bottomRight().x;
+            fireY = bottomRight().y;
+
+            getAttackImage().drawFromTopLeft(fireX, fireY, new DrawOptions().setRotation(Math.PI));
+
         }
 
+        if (player.intersects(new Rectangle(fireX, fireY, getAttackImage().getWidth(),
+                getAttackImage().getHeight()))) {
+
+            player.takesDamage(getType(), getDamage());
+
+        }
+
+    }
+
+    public Image getAttackImage() {
+        return FIRE;
+    }
+
+    public int getDamage() {
+        return DAMAGE;
     }
 
     @Override

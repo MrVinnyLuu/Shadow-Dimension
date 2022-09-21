@@ -23,20 +23,13 @@ public class Navec extends Demon {
     }
 
     @Override
-    public void attack(PlayableCharacter player) {
-        if (player.centre().x <= centre().x && player.centre().y <= centre().y) {
-            NAVEC_FIRE.drawFromTopLeft(topLeft().x - NAVEC_FIRE.getWidth(), topLeft().y - NAVEC_FIRE.getHeight(),
-                    new DrawOptions().setRotation(0));
-        } else if (player.centre().x <= centre().x && player.centre().y > centre().y) {
-            NAVEC_FIRE.drawFromTopLeft(bottomLeft().x - NAVEC_FIRE.getWidth(), bottomLeft().y,
-                    new DrawOptions().setRotation(-Math.PI/2));
-        } else if (player.centre().x > centre().x && player.centre().y <= centre().y) {
-            NAVEC_FIRE.drawFromTopLeft(topRight().x, topRight().y - NAVEC_FIRE.getHeight(),
-                    new DrawOptions().setRotation(Math.PI/2));
-        } else if (player.centre().x > centre().x && player.centre().y > centre().y) {
-            NAVEC_FIRE.drawFromTopLeft(bottomRight().x, bottomRight().y,
-                    new DrawOptions().setRotation(Math.PI));
-        }
+    public Image getAttackImage() {
+        return NAVEC_FIRE;
+    }
+
+    @Override
+    public int getDamage() {
+        return NAVEC_DAMAGE;
     }
 
     @Override
