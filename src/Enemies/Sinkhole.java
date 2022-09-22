@@ -14,6 +14,11 @@ public class Sinkhole extends Enemy {
     }
 
     @Override
+    public void collidesWith(Enemy enemy) {
+        enemy.reverseMovement();
+    }
+
+    @Override
     public double getAttackRadius() {
         return ATTACK_RADIUS;
     }

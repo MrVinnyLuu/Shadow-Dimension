@@ -22,6 +22,10 @@ public abstract class Enemy extends Rectangle {
         return;
     }
 
+    public void collidesWith(Enemy enemy) {
+        return;
+    }
+
     public void takesDamage(String attacker, int damage) {
         return;
     }

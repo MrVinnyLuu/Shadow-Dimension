@@ -285,9 +285,9 @@ public class ShadowDimension extends AbstractGame {
                 anEnemy.attack(player);
             }
 
-            for (Enemy aSinkhole: enemies) {
-                if (aSinkhole instanceof Sinkhole && anEnemy.intersects(aSinkhole)) {
-                    anEnemy.reverseMovement();
+            for (Enemy anotherEnemy: enemies) {
+                if (anEnemy.intersects(anotherEnemy)) {
+                    anEnemy.collidesWith(anotherEnemy);
                 }
             }
 
