@@ -10,4 +10,9 @@ public class Tree extends Obstacle{
         super(xPos, yPos, TREE_IMAGE);
     }
 
+    @Override
+    public Image getImage() {
+        return TREE_IMAGE;
+    }
+
 }

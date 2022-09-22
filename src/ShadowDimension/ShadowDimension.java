@@ -3,9 +3,11 @@ package ShadowDimension;
 import Characters.*;
 import Enemies.*;
 import Obstacles.*;
+
 import bagel.*;
 import bagel.util.Point;
 import bagel.util.Colour;
+
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public class ShadowDimension extends AbstractGame {
     private final static String START_INSTRUCTION = "PRESS SPACE TO START";
     private final static double LVL0_START_X_OFFSET = 90, LVL0_START_Y_OFFSET = 190;
     private final static double LVL1_START_X = 350, LVL1_START_Y = 350;
+
     private final static String MOVE_CTRLS_INSTRUCT = "USE ARROW KEYS TO FIND GATE";
     private final static String ATTACK_CTRL_INSTRUCT = "PRESS A TO ATTACK";
     private final static String NAVEC_INSTRUCT = "DEFEAT NAVEC TO WIN";
@@ -51,9 +54,11 @@ public class ShadowDimension extends AbstractGame {
     private final static int PLAYER_HP_FONT_SIZE = 30;
     private final Font PLAYER_HP_TEXT = new Font(FONT_FILENAME, PLAYER_HP_FONT_SIZE);
     private final static double PLAYER_HP_TEXT_X = 20, PLAYER_HP_TEXT_Y = 25;
+
     private final static int ENEMY_HP_FONT_SIZE = 15;
     private final Font ENEMY_HP_TEXT = new Font(FONT_FILENAME, ENEMY_HP_FONT_SIZE);
     private final static double ENEMY_HP_TEXT_Y_OFFSET = -6;
+
     private final static Colour GREEN_HP = new Colour(0, 0.8, 0.2);
     private final static double GREEN_HP_THRESHOLD = 65;
     private final static Colour ORANGE_HP = new Colour(0.9, 0.6, 0);
@@ -73,6 +78,7 @@ public class ShadowDimension extends AbstractGame {
 
     /* Game Object Constants */
     private final static ArrayList<Enemy> enemies = new ArrayList<>();
+    private final static int NAVEC_INDEX = 0;
     private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
 
     /* Attributes */
@@ -128,15 +134,13 @@ public class ShadowDimension extends AbstractGame {
         for (String[] row : csvData) {
             switch (row[DATA_NAME_COL]) {
                 case "Sinkhole":
-                    enemies.add(new Sinkhole(Double.parseDouble(row[DATA_X_COL]),
-                            Double.parseDouble(row[DATA_Y_COL])));
+                    enemies.add(new Sinkhole(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL])));
                     break;
                 case "Demon":
-                    enemies.add(new Demon(Double.parseDouble(row[DATA_X_COL]),
-                            Double.parseDouble(row[DATA_Y_COL])));
+                    enemies.add(new Demon(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL])));
                     break;
                 case "Navec":
-                    enemies.add(new Navec(Double.parseDouble(row[DATA_X_COL]),
+                    enemies.add(NAVEC_INDEX, new Navec(Double.parseDouble(row[DATA_X_COL]),
                             Double.parseDouble(row[DATA_Y_COL])));
                     break;
                 case "Wall":
@@ -277,11 +281,6 @@ public class ShadowDimension extends AbstractGame {
 
             anEnemy.updateState();
 
-            if (anEnemy instanceof Navec && anEnemy.isExhausted()) {
-                gameState = GAME_WIN;
-                return;
-            }
-
             // Check if enemy has collided with the bounds
             if (bottomRightCorner.x < anEnemy.topLeft().x || anEnemy.topLeft().x < topLeftCorner.x
                     || bottomRightCorner.y < anEnemy.topLeft().y || anEnemy.topLeft().y < topLeftCorner.y) {
@@ -303,6 +302,8 @@ public class ShadowDimension extends AbstractGame {
             }
 
         }
+
+        if (enemies.get(NAVEC_INDEX).isExhausted()) return;
 
         enemies.removeIf(Enemy::isExhausted);
 
@@ -358,13 +359,16 @@ public class ShadowDimension extends AbstractGame {
         } else if ((gameState == GAME_START || gameState == LVL1_START) && input.wasPressed(Keys.SPACE)) {
             initializeLevel();
             gameState = GAME_PLAY;
+        } else if (gameState == LVL_FINISH && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
+            currentLevel++;
+            gameState = LVL1_START;
         // Level 0 win condition: Player position is in the portal
         } else if (gameState == GAME_PLAY && currentLevel == 0
                 && player.centre().x >= PORTAL_MIN_X && player.centre().y >= PORTAL_MIN_Y) {
             gameState = LVL_FINISH;
-        } else if (gameState == LVL_FINISH && currentLevel == 0 && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
-            currentLevel = 1;
-            gameState = LVL1_START;
+        // Level 1 win condition: Navec is exhausted (i.e. has been killed)
+        } else if (gameState == GAME_PLAY && currentLevel == 1 && enemies.get(NAVEC_INDEX).isExhausted()) {
+            gameState = GAME_WIN;
         // Lose condition: Player HP reaches its minimum
         } else if (gameState == GAME_PLAY && player.getHP() == PlayableCharacter.getMinHP()) {
             gameState = GAME_LOSE;

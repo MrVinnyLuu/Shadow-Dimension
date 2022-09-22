@@ -6,8 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="cc5d9ee8-8ff0-4fb7-bb6a-d6a5a2134e92" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/level0.csv" beforeDir="false" afterPath="$PROJECT_DIR$/res/level0.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/level1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/res/level1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Characters/PlayableCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Characters/PlayableCharacter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enemies/Demon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Demon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Obstacles/Obstacle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Obstacle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Obstacles/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Tree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Obstacles/Wall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Wall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Obstacles/Obstacle.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Obstacles/Obstacle.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Obstacles/Tree.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Obstacles/Tree.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Obstacles/Wall.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Obstacles/Wall.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,15 +49,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/UNI/SWEN/luuvl-project-2",
-    "run.code.analysis.last.selected.profile": "pProject Default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/UNI/SWEN/luuvl-project-2&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="ShadowDimension" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ShadowDimension.ShadowDimension" />

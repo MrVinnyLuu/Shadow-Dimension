@@ -149,7 +149,7 @@ public abstract class PlayableCharacter extends Rectangle {
     public void takesDamage(String attacker, int damage) {
 
         if (isInvincible) return;
-        if (!attacker.equals("Enemies.Sinkhole")) isInvincible = true;
+        if (!attacker.equals("Sinkhole")) isInvincible = true;
 
         // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
         healthPoints = Math.max(healthPoints - damage, MIN_HP);

@@ -134,10 +134,10 @@ public class Demon extends Enemy {
         return MAX_HP;
     }
 
-    private void initializeMovementSpeed(boolean isNavec) {
+    private void initializeMovementSpeed(boolean guaranteeAggressive) {
 
         // 50% chance to be aggressive (Enemies.Navec is always aggressive)
-        if (RAND.nextBoolean() || isNavec) {
+        if (RAND.nextBoolean() || guaranteeAggressive) {
             // 50% chance to move up and down. 50% chance to move left and right
             if (RAND.nextBoolean()) {
                 verticalSpeed = RAND.nextDouble()*(MAX_BASE_SPEED-MIN_BASE_SPEED) + MIN_BASE_SPEED;

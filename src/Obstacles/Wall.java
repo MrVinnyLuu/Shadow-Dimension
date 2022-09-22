@@ -10,4 +10,9 @@ public class Wall extends Obstacle {
         super(xPos, yPos, WALL_IMAGE);
     }
 
+    @Override
+    public Image getImage() {
+        return WALL_IMAGE;
+    }
+
 }
