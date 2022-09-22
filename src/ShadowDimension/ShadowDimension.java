@@ -110,19 +110,9 @@ public class ShadowDimension extends AbstractGame {
 
         enemies.clear();
         obstacles.clear();
-        player = new CharacterFae(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
+
+        player = CharacterFae.getInstance(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
                 Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
-//        if (currentLevel == 0) {
-//            // Initialize playerFae using the first row of the CSV data as per assignment specifications
-//            player = new Characters.PlayableCharacter(CHARACTER_NAME, Double.parseDouble(csvData.get(0)[DATA_X_COL]),
-//                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]), CHARACTER_FACE_LEFT, CHARACTER_FACE_RIGHT);
-//        } else {
-//            enemies.clear();
-//            obstacles.clear();
-//            player.resetHP();
-//            player.setPosition(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
-//                    Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
-//        }
 
         // Set the boundaries using the last two rows of the CSV data as per assignment specifications
         bottomRightCorner = new Point(Double.parseDouble(csvData.get(csvData.size()-1)[DATA_X_COL]),
@@ -303,7 +293,7 @@ public class ShadowDimension extends AbstractGame {
 
         }
 
-        if (enemies.get(NAVEC_INDEX).isExhausted()) return;
+        if (currentLevel == 1 && enemies.get(NAVEC_INDEX).isExhausted()) return;
 
         enemies.removeIf(Enemy::isExhausted);
 
