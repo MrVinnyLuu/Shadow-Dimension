@@ -2,7 +2,7 @@ package Obstacles;
 
 import bagel.Image;
 
-public class Tree extends Obstacle{
+public class Tree extends Obstacle {
 
     private static final Image TREE_IMAGE = new Image("res/tree.png");
 

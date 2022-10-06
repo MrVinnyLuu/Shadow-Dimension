@@ -14,13 +14,13 @@ import java.util.ArrayList;
 
 /**
  * SWEN20003 Project 2, Semester 2, 2022
- * Vincent Luu, 1269979
+ * @author Vincent Luu, 1269979
  */
 
 public class ShadowDimension extends AbstractGame {
 
     /* Display Constants */
-    public final static int REFRESH_RATE = 144;
+    public final static int REFRESH_RATE = 60;
     private final static int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
     private final Image LVL0_BACKGROUND = new Image("res/background0.png");
@@ -165,9 +165,78 @@ public class ShadowDimension extends AbstractGame {
     }
 
     /**
+     * Method loops through each enemy and updates its state
+     */
+    private void updateEnemyStates() {
+
+        for (Enemy anEnemy : enemies) {
+
+            anEnemy.updateState();
+
+            // Check if enemy has collided with the bounds
+            if (bottomRightCorner.x < anEnemy.topLeft().x || anEnemy.topLeft().x < topLeftCorner.x
+                    || bottomRightCorner.y < anEnemy.topLeft().y || anEnemy.topLeft().y < topLeftCorner.y) {
+                anEnemy.reverseMovement();
+            }
+
+            if (player.isAttacking() && player.intersects(anEnemy)) {
+                player.dealsDamage(anEnemy);
+            }
+
+            if (anEnemy.centre().distanceTo(player.centre()) <= anEnemy.getAttackRadius()) {
+                anEnemy.attack(player);
+            }
+
+            for (Enemy anotherEnemy: enemies) {
+                if (anEnemy.intersects(anotherEnemy)) {
+                    anEnemy.collidesWith(anotherEnemy);
+                }
+            }
+
+        }
+
+        if (currentLevel == 1 && enemies.get(NAVEC_INDEX).isExhausted()) return;
+
+        enemies.removeIf(Enemy::isExhausted);
+
+    }
+
+    /**
+     * Method detects if the character or an enemy has collided
+     */
+    private void detectCollisions() {
+
+        // Check if player has collided with the boundaries
+        // Separate 'if' statements so player can "slide" along boundaries, but can't "escape" at corners
+        if (bottomRightCorner.x <= player.topLeft().x || player.topLeft().x <= topLeftCorner.x) {
+            player.xPosRollback();
+        }
+        if (bottomRightCorner.y < player.topLeft().y || player.topLeft().y < topLeftCorner.y) {
+            player.yPosRollback();
+        }
+
+        // Check if player or an enemy has collided with an obstacle
+        for (Obstacle anObstacle : obstacles) {
+
+            if (player.intersects(anObstacle)) {
+                player.xPosRollback();
+                player.yPosRollback();
+            }
+
+            for (Enemy anEnemy: enemies) {
+                if (anEnemy.intersects(anObstacle)) {
+                    anEnemy.reverseMovement();
+                }
+            }
+
+        }
+
+    }
+
+    /**
      * Method displays screens other than the main gameplay screen
      * i.e. Title screen and win/lose screens
-    */
+     */
     private void displayScreen() {
 
         if (gameState == GAME_START) {
@@ -253,6 +322,9 @@ public class ShadowDimension extends AbstractGame {
 
     }
 
+    /**
+     * Method computes the display colour of a given health point percentage
+     */
     private Colour getHPColour(int HPPercent) {
         Colour HP_colour;
         if (HPPercent >= GREEN_HP_THRESHOLD) {
@@ -263,72 +335,6 @@ public class ShadowDimension extends AbstractGame {
             HP_colour = RED_HP;
         }
         return HP_colour;
-    }
-
-    private void updateEnemyStates() {
-
-        for (Enemy anEnemy : enemies) {
-
-            anEnemy.updateState();
-
-            // Check if enemy has collided with the bounds
-            if (bottomRightCorner.x < anEnemy.topLeft().x || anEnemy.topLeft().x < topLeftCorner.x
-                    || bottomRightCorner.y < anEnemy.topLeft().y || anEnemy.topLeft().y < topLeftCorner.y) {
-                anEnemy.reverseMovement();
-            }
-
-            if (player.isAttacking() && player.intersects(anEnemy)) {
-                player.dealsDamage(anEnemy);
-            }
-
-            if (anEnemy.centre().distanceTo(player.centre()) <= anEnemy.getAttackRadius()) {
-                anEnemy.attack(player);
-            }
-
-            for (Enemy anotherEnemy: enemies) {
-                if (anEnemy.intersects(anotherEnemy)) {
-                    anEnemy.collidesWith(anotherEnemy);
-                }
-            }
-
-        }
-
-        if (currentLevel == 1 && enemies.get(NAVEC_INDEX).isExhausted()) return;
-
-        enemies.removeIf(Enemy::isExhausted);
-
-    }
-
-    /**
-     * Method detects if the character or an enemy has collided
-     */
-    private void detectCollisions() {
-
-        // Check if player has collided with the boundaries
-        // Separate 'if' statements so player can "slide" along boundaries, but can't "escape" at corners
-        if (bottomRightCorner.x < player.topLeft().x || player.topLeft().x < topLeftCorner.x) {
-            player.xPosRollback();
-        }
-        if (bottomRightCorner.y < player.topLeft().y || player.topLeft().y < topLeftCorner.y) {
-            player.yPosRollback();
-        }
-
-        // Check if player or an enemy has collided with an obstacle
-        for (Obstacle anObstacle : obstacles) {
-
-            if (player.intersects(anObstacle)) {
-                player.xPosRollback();
-                player.yPosRollback();
-            }
-
-            for (Enemy anEnemy: enemies) {
-                if (anEnemy.intersects(anObstacle)) {
-                    anEnemy.reverseMovement();
-                }
-            }
-
-        }
-
     }
 
     /**

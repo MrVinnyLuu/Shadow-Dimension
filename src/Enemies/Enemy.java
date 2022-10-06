@@ -14,6 +14,12 @@ public abstract class Enemy extends Rectangle {
         this.enemyType = enemyType;
     }
 
+    public abstract Image getImage();
+
+    public abstract double getAttackRadius();
+
+    public abstract void attack(PlayableCharacter player);
+
     public void updateState() {
         return;
     }
@@ -33,12 +39,6 @@ public abstract class Enemy extends Rectangle {
     public boolean isExhausted() {
         return isExhausted;
     }
-
-    public abstract double getAttackRadius();
-
-    public abstract void attack(PlayableCharacter player);
-
-    public abstract Image getImage();
 
     public int getHPPercent() {
         return -1;
