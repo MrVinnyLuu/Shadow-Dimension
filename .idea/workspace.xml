@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc5d9ee8-8ff0-4fb7-bb6a-d6a5a2134e92" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/hs_err_pid11344.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid14068.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid14416.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid17260.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid4112.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ShadowDimension/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShadowDimension/Level.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

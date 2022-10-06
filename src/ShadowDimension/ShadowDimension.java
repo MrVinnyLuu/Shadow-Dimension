@@ -20,11 +20,8 @@ import java.util.ArrayList;
 public class ShadowDimension extends AbstractGame {
 
     /* Display Constants */
-    public final static int REFRESH_RATE = 60;
+    public final static int REFRESH_RATE = 144;
     private final static int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
-
-    private final Image LVL0_BACKGROUND = new Image("res/background0.png");
-    private final Image LVL1_BACKGROUND = new Image("res/background1.png");
 
     /* Text and font Constants */
     private final static String FONT_FILENAME = "res/frostbite.ttf";
@@ -47,7 +44,7 @@ public class ShadowDimension extends AbstractGame {
     private final static String NAVEC_INSTRUCT = "DEFEAT NAVEC TO WIN";
 
     private final static String LVL_COMPLETE = "LEVEL COMPLETE!";
-    private final static double LVL_COMPLETE_DISPLAY_TIME = 3;
+
     private final static String CONGRATS = "CONGRATULATIONS!";
     private final static String GAME_OVER = "GAME OVER!";
 
@@ -85,7 +82,6 @@ public class ShadowDimension extends AbstractGame {
 
     /* Attributes */
     private int gameState = GAME_START;
-    private double lvlCompleteTimer = 0;
     private PlayableCharacter player;
     private Point topLeftCorner, bottomRightCorner;
 
@@ -254,7 +250,7 @@ public class ShadowDimension extends AbstractGame {
 
         } else if (gameState == LVL_FINISH) {
 
-            lvlCompleteTimer += 1.0/REFRESH_RATE;
+            level.levelCompleteTimer();
             double xPos = WINDOW_WIDTH/2.0 - STANDARD_TEXT.getWidth(LVL_COMPLETE)/2.0;
             double yPos = WINDOW_HEIGHT/2.0 + STANDARD_FONT_SIZE/2.0;
             STANDARD_TEXT.drawString(LVL_COMPLETE, xPos, yPos);
@@ -353,7 +349,7 @@ public class ShadowDimension extends AbstractGame {
             level.nextLevel();
             initializeGameObjects();
             gameState = GAME_PLAY;
-        } else if (gameState == LVL_FINISH && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
+        } else if (gameState == LVL_FINISH && level.levelCompleteTimer()) {
             level.nextLevel();
             gameState = LVL1_START;
             // Level 0 win condition: Player position is in the portal
