@@ -67,9 +67,11 @@ public class ShadowDimension extends AbstractGame {
 
     /* CSV Constants */
     private final static String DATA_FILEPATH = "res/level";
+    private final static String DATA_FILETYPE = ".csv";
     private final static int DATA_NAME_COL = 0, DATA_X_COL = 1, DATA_Y_COL = 2;
 
     /* Game element Constants */
+    private final static Level level = new Level();
     private final static int GAME_START = 0, GAME_PLAY = 1, LVL_FINISH = 2, LVL1_START = 3;
     private final static int GAME_WIN = -1, GAME_LOSE = -2;
     private final static double PORTAL_MIN_X = 950, PORTAL_MIN_Y = 670;
@@ -83,7 +85,6 @@ public class ShadowDimension extends AbstractGame {
 
     /* Attributes */
     private int gameState = GAME_START;
-    private int currentLevel = 0;
     private double lvlCompleteTimer = 0;
     private PlayableCharacter player;
     private Point topLeftCorner, bottomRightCorner;
@@ -101,10 +102,10 @@ public class ShadowDimension extends AbstractGame {
     }
 
     /**
-     * Method takes the data from the CSV file and uses it to populate level with the character,
+     * Method takes the data from the CSV file and uses it to initialize the character,
      * boundaries and obstacles
      */
-    private void initializeLevel() {
+    private void initializeGameObjects() {
 
         ArrayList<String[]> csvData = readCSV();
 
@@ -152,7 +153,7 @@ public class ShadowDimension extends AbstractGame {
         String row;
         ArrayList<String[]> data = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILEPATH + currentLevel + ".csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILEPATH + level.getCurrentLevel() + DATA_FILETYPE))) {
             while ((row = br.readLine()) != null) {
                 data.add(row.split(","));
             }
@@ -195,7 +196,7 @@ public class ShadowDimension extends AbstractGame {
 
         }
 
-        if (currentLevel == 1 && enemies.get(NAVEC_INDEX).isExhausted()) return;
+        if (level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isExhausted()) return;
 
         enemies.removeIf(Enemy::isExhausted);
 
@@ -294,11 +295,7 @@ public class ShadowDimension extends AbstractGame {
     private void displayGame() {
 
         // Display the background
-        if (currentLevel == 0) {
-            LVL0_BACKGROUND.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
-        } else if (currentLevel == 1) {
-            LVL1_BACKGROUND.draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
-        }
+        level.getLevelBackground().draw(WINDOW_WIDTH/2.0, WINDOW_HEIGHT/2.0);
 
         // Display the obstacles
         for (Obstacle anObstacle : obstacles) {
@@ -342,28 +339,30 @@ public class ShadowDimension extends AbstractGame {
      */
     private void updateGameState(Input input) {
 
-        if (gameState == GAME_PLAY && currentLevel == 1 && input.wasPressed(Keys.L)) {
+        if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.L)) {
             Demon.changeSpeedMultiplier(TIMESCALE_INCREASE);
-        } else if (gameState == GAME_PLAY && currentLevel == 1 && input.wasPressed(Keys.K)) {
+        } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.K)) {
             Demon.changeSpeedMultiplier(TIMESCALE_DECREASE);
         }
 
         if (gameState == GAME_START && input.wasPressed(Keys.W)) {
-            currentLevel = 1;
-            initializeLevel();
+            level.skipToEnd();
+            initializeGameObjects();
             gameState = GAME_PLAY;
         } else if ((gameState == GAME_START || gameState == LVL1_START) && input.wasPressed(Keys.SPACE)) {
-            initializeLevel();
+            level.nextLevel();
+            initializeGameObjects();
             gameState = GAME_PLAY;
         } else if (gameState == LVL_FINISH && lvlCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
-            currentLevel++;
+            level.nextLevel();
             gameState = LVL1_START;
         // Level 0 win condition: Player position is in the portal
-        } else if (gameState == GAME_PLAY && currentLevel == 0
+        } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 0
                 && player.centre().x >= PORTAL_MIN_X && player.centre().y >= PORTAL_MIN_Y) {
             gameState = LVL_FINISH;
+            level.nextLevel();
         // Level 1 win condition: Navec is exhausted (i.e. has been killed)
-        } else if (gameState == GAME_PLAY && currentLevel == 1 && enemies.get(NAVEC_INDEX).isExhausted()) {
+        } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isExhausted()) {
             gameState = GAME_WIN;
         // Lose condition: Player HP reaches its minimum
         } else if (gameState == GAME_PLAY && player.getHP() == PlayableCharacter.getMinHP()) {
