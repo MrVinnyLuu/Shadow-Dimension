@@ -22,7 +22,7 @@ public abstract class PlayableCharacter extends Rectangle {
     private double xPos, yPos, prevX, prevY;
 
 
-    public PlayableCharacter (double startingX, double startingY, Image referenceImage) {
+    protected PlayableCharacter (double startingX, double startingY, Image referenceImage) {
         // Dimensions taken from the pixel size of leftImage which is assumed to be same as rightImage
         super(startingX, startingY, referenceImage.getWidth(), referenceImage.getHeight());
         this.xPos = startingX;
