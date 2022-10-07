@@ -1,8 +1,6 @@
 package Enemies;
 
-import Characters.PlayableCharacter;
 import bagel.Image;
-import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public abstract class Enemy extends Rectangle implements canAttack {

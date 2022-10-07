@@ -316,8 +316,8 @@ public class ShadowDimension extends AbstractGame {
 
         // Display the player
         player.getImage().draw(player.centre().x, player.centre().y);
-        PLAYER_HP_TEXT.drawString(String.format("%d%%", player.getHPPercent()), PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y,
-                new DrawOptions().setBlendColour(getHPColour(player.getHPPercent())));
+        PLAYER_HP_TEXT.drawString(String.format("%d%%", player.health.getHPPercent()), PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y,
+                new DrawOptions().setBlendColour(getHPColour(player.health.getHPPercent())));
 
     }
 
@@ -367,7 +367,7 @@ public class ShadowDimension extends AbstractGame {
         } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isExhausted()) {
             gameState = GAME_WIN;
             // Lose condition: Player HP reaches its minimum
-        } else if (gameState == GAME_PLAY && player.getHP() == PlayableCharacter.getMinHP()) {
+        } else if (gameState == GAME_PLAY && player.health.getHP() == player.health.getMinHP()) {
             gameState = GAME_LOSE;
         }
 

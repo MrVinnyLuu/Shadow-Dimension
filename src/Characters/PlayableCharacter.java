@@ -15,7 +15,10 @@ public abstract class PlayableCharacter extends Rectangle {
     private final static double PLAYER_STEP = 2;
     private final static double ATTACK_DURATION = 1, COOLDOWN_DURATION = 2, INVINCIBILITY_DURATION = 3;
 
-    private int healthPoints = MAX_HP;
+    /**
+     * Attribute that stores information about the character's health
+     */
+    public Health health = new Health(MAX_HP, MIN_HP);
     private boolean isFaceRight = true, isAttacking = false, isInvincible = false;
     private double attackTimer = 0, cooldownTimer = COOLDOWN_DURATION, invincibilityTimer = 0;
     // x and y coordinates refers to the top left corner
@@ -115,29 +118,6 @@ public abstract class PlayableCharacter extends Rectangle {
         yPos = prevY;
     }
 
-    public int getHP() {
-        return healthPoints;
-    }
-
-    /**
-     * Method returns the character's current health point percentage
-     * Note that using a MAX_HP of 100, HPPercent() is the same as getHP().
-     */
-    public int getHPPercent() {
-        return (int) Math.round(healthPoints*100.0/MAX_HP);
-    }
-
-    public static int getMinHP() {
-        return MIN_HP;
-    }
-
-    /**
-     * Method resets the player HP to max
-     */
-    public void resetHP() {
-        healthPoints = MAX_HP;
-    }
-
     public void setPosition(double xPos, double yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
@@ -151,11 +131,10 @@ public abstract class PlayableCharacter extends Rectangle {
         if (isInvincible) return;
         if (!attacker.equals("Sinkhole")) isInvincible = true;
 
-        // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
-        healthPoints = Math.max(healthPoints - damage, MIN_HP);
+        health.takesDamage(damage);
 
-        System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
-                attacker, damage, getCharacterName(), getCharacterName(), healthPoints, MAX_HP);
+        System.out.format("%s inflicts %d damage points on %s. %s's current health: %s\n",
+                attacker, damage, getCharacterName(), getCharacterName(), health);
 
     }
 
