@@ -1,5 +1,6 @@
 package Enemies;
 
+import Characters.Health;
 import bagel.Image;
 
 public class Navec extends Demon {
@@ -15,7 +16,7 @@ public class Navec extends Demon {
     private final static Image NAVEC_FIRE = new Image("res/navec/navecFire.png");
 
     public Navec(double xPos, double yPos) {
-        super("Navec", xPos, yPos, NAVEC_FACE_LEFT, NAVEC_MAX_HP);
+        super("Navec", xPos, yPos, NAVEC_FACE_LEFT, new Health(NAVEC_MAX_HP, MIN_HP));
     }
 
     @Override
@@ -44,11 +45,6 @@ public class Navec extends Demon {
         } else {
             return NAVEC_FACE_LEFT;
         }
-    }
-
-    @Override
-    public int getMaxHP() {
-        return NAVEC_MAX_HP;
     }
 
 }

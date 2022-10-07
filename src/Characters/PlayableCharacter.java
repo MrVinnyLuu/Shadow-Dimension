@@ -2,6 +2,7 @@ package Characters;
 
 import ShadowDimension.ShadowDimension;
 import Enemies.Enemy;
+import bagel.Font;
 import bagel.Image;
 import bagel.Input;
 import bagel.Keys;
@@ -14,11 +15,9 @@ public abstract class PlayableCharacter extends Rectangle {
     private final static int DAMAGE = 20;
     private final static double PLAYER_STEP = 2;
     private final static double ATTACK_DURATION = 1, COOLDOWN_DURATION = 2, INVINCIBILITY_DURATION = 3;
+    private final static double PLAYER_HP_TEXT_X = 20, PLAYER_HP_TEXT_Y = 25;
 
-    /**
-     * Attribute that stores information about the character's health
-     */
-    public Health health = new Health(MAX_HP, MIN_HP);
+    private final Health health = new Health(MAX_HP, MIN_HP);
     private boolean isFaceRight = true, isAttacking = false, isInvincible = false;
     private double attackTimer = 0, cooldownTimer = COOLDOWN_DURATION, invincibilityTimer = 0;
     // x and y coordinates refers to the top left corner
@@ -35,6 +34,14 @@ public abstract class PlayableCharacter extends Rectangle {
     }
 
     protected abstract String getCharacterName();
+
+    public Health getHealth() {
+        return health;
+    }
+
+    public void displayHP(Font font) {
+        health.displayHP(font, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
+    }
 
     public abstract Image getImage();
 

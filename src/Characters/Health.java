@@ -1,6 +1,16 @@
 package Characters;
 
+import bagel.DrawOptions;
+import bagel.Font;
+import bagel.util.Colour;
+
 public class Health {
+
+    private final static Colour GREEN_HP = new Colour(0, 0.8, 0.2);
+    private final static double GREEN_HP_THRESHOLD = 65;
+    private final static Colour ORANGE_HP = new Colour(0.9, 0.6, 0);
+    private final static double ORANGE_HP_THRESHOLD = 35;
+    private final static Colour RED_HP = new Colour(1, 0, 0);
 
     private int currentHP;
     private final int maxHP, minHP;
@@ -17,7 +27,7 @@ public class Health {
     }
 
     /**
-     * Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
+     * Minus damage from health
      */
     public void takesDamage(int damage) {
         currentHP = Math.max(currentHP - damage, minHP);
@@ -47,6 +57,26 @@ public class Health {
      */
     public void resetHP() {
         currentHP = maxHP;
+    }
+
+    public void displayHP(Font font, double x, double y) {
+        font.drawString(String.format("%d%%", getHPPercent()), x, y,
+                new DrawOptions().setBlendColour(getHPColour()));
+    }
+
+    /**
+     * Method computes the display colour of a given health point percentage
+     */
+    public Colour getHPColour() {
+        Colour HP_colour;
+        if (getHPPercent() >= GREEN_HP_THRESHOLD) {
+            HP_colour = GREEN_HP;
+        } else if (getHPPercent() >= ORANGE_HP_THRESHOLD) {
+            HP_colour = ORANGE_HP;
+        } else {
+            HP_colour = RED_HP;
+        }
+        return HP_colour;
     }
 
 }

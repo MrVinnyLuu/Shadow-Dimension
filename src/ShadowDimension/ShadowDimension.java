@@ -6,7 +6,6 @@ import Obstacles.*;
 
 import bagel.*;
 import bagel.util.Point;
-import bagel.util.Colour;
 
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -53,17 +52,9 @@ public class ShadowDimension extends AbstractGame {
 
     private final static int PLAYER_HP_FONT_SIZE = 30;
     private final Font PLAYER_HP_TEXT = new Font(FONT_FILENAME, PLAYER_HP_FONT_SIZE);
-    private final static double PLAYER_HP_TEXT_X = 20, PLAYER_HP_TEXT_Y = 25;
 
     private final static int ENEMY_HP_FONT_SIZE = 15;
     private final Font ENEMY_HP_TEXT = new Font(FONT_FILENAME, ENEMY_HP_FONT_SIZE);
-    private final static double ENEMY_HP_TEXT_Y_OFFSET = -6;
-
-    private final static Colour GREEN_HP = new Colour(0, 0.8, 0.2);
-    private final static double GREEN_HP_THRESHOLD = 65;
-    private final static Colour ORANGE_HP = new Colour(0.9, 0.6, 0);
-    private final static double ORANGE_HP_THRESHOLD = 35;
-    private final static Colour RED_HP = new Colour(1, 0, 0);
 
     /* CSV Constants */
     private final static String DATA_FILEPATH = "res/level";
@@ -309,31 +300,13 @@ public class ShadowDimension extends AbstractGame {
         // Display the enemies
         for (Enemy anEnemy : enemies) {
             anEnemy.getImage().draw(anEnemy.centre().x, anEnemy.centre().y);
-            ENEMY_HP_TEXT.drawString(String.format("%d%%", anEnemy.getHPPercent()), anEnemy.topLeft().x,
-                    anEnemy.topLeft().y + ENEMY_HP_TEXT_Y_OFFSET,
-                    new DrawOptions().setBlendColour(getHPColour(anEnemy.getHPPercent())));
+            anEnemy.displayHP(ENEMY_HP_TEXT);
         }
 
         // Display the player
         player.getImage().draw(player.centre().x, player.centre().y);
-        PLAYER_HP_TEXT.drawString(String.format("%d%%", player.health.getHPPercent()), PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y,
-                new DrawOptions().setBlendColour(getHPColour(player.health.getHPPercent())));
+        player.displayHP(PLAYER_HP_TEXT);
 
-    }
-
-    /**
-     * Method computes the display colour of a given health point percentage
-     */
-    private Colour getHPColour(int HPPercent) {
-        Colour HP_colour;
-        if (HPPercent >= GREEN_HP_THRESHOLD) {
-            HP_colour = GREEN_HP;
-        } else if (HPPercent >= ORANGE_HP_THRESHOLD) {
-            HP_colour = ORANGE_HP;
-        } else {
-            HP_colour = RED_HP;
-        }
-        return HP_colour;
     }
 
     /**
@@ -367,7 +340,7 @@ public class ShadowDimension extends AbstractGame {
         } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isExhausted()) {
             gameState = GAME_WIN;
             // Lose condition: Player HP reaches its minimum
-        } else if (gameState == GAME_PLAY && player.health.getHP() == player.health.getMinHP()) {
+        } else if (gameState == GAME_PLAY && player.getHealth().getHP() == player.getHealth().getMinHP()) {
             gameState = GAME_LOSE;
         }
 

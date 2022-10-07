@@ -1,18 +1,21 @@
 package Enemies;
 
+import Characters.Health;
 import ShadowDimension.ShadowDimension;
 import Characters.PlayableCharacter;
 import bagel.DrawOptions;
+import bagel.Font;
 import bagel.Image;
 import bagel.util.Rectangle;
 import bagel.util.Point;
 
 import java.util.Random;
 
-public class Demon extends Enemy {
+public class Demon extends Enemy implements canAttack {
 
+    private final static double DEMON_HP_TEXT_Y_OFFSET = -6;
     protected final static int MAX_HP = 40;
-    private final static int MIN_HP = 0;
+    protected final static int MIN_HP = 0;
     protected final static int DAMAGE = 10;
     private final static double ATTACK_RADIUS = 150;
     private final static double INVINCIBILITY_DURATION = 3;
@@ -38,22 +41,22 @@ public class Demon extends Enemy {
     private double horizontalSpeed = 0, verticalSpeed = 0;
     protected boolean isFaceRight, isInvincible = false;
     private double invincibilityTimer = 0;
-    protected int healthPoints;
+    private final Health health;
 
     public Demon (double xPos, double yPos) {
         super(xPos, yPos, FACE_LEFT);
         this.xPos = xPos;
         this.yPos = yPos;
-        healthPoints = MAX_HP;
+        health = new Health(MAX_HP, MIN_HP);
         initializeMovementSpeed(false);
     }
 
-    public Demon (String specialDemon, double xPos, double yPos, Image specialDemonImage, int specialDemonHP) {
+    public Demon (String specialDemon, double xPos, double yPos, Image specialDemonImage, Health specialDemonHP) {
         super(xPos, yPos, specialDemonImage);
         demonType = specialDemon;
         this.xPos = xPos;
         this.yPos = yPos;
-        healthPoints = specialDemonHP;
+        health = specialDemonHP;
         initializeMovementSpeed(true);
     }
 
@@ -65,7 +68,6 @@ public class Demon extends Enemy {
         return ATTACK_RADIUS;
     }
 
-    @Override
     public void attack(PlayableCharacter player) {
 
         double fireX, fireY;
@@ -130,15 +132,6 @@ public class Demon extends Enemy {
         }
     }
 
-    @Override
-    public int getHPPercent() {
-        return (int) Math.round(healthPoints*100.0/getMaxHP());
-    }
-
-    public int getMaxHP() {
-        return MAX_HP;
-    }
-
     private void initializeMovementSpeed(boolean guaranteedAggressive) {
 
         // 50% chance to be aggressive (Navec is always aggressive)
@@ -160,7 +153,7 @@ public class Demon extends Enemy {
     @Override
     public void updateState() {
 
-        if (healthPoints <= MIN_HP) isExhausted = true;
+        if (health.getHP() <= MIN_HP) isExhausted = true;
 
         if (isInvincible) {
             invincibilityTimer += 1.0/ ShadowDimension.REFRESH_RATE;
@@ -196,16 +189,20 @@ public class Demon extends Enemy {
     }
 
     @Override
+    public void displayHP(Font font) {
+        health.displayHP(font, xPos, yPos+DEMON_HP_TEXT_Y_OFFSET);
+    }
+
+    @Override
     public void takesDamage(String attacker, int damage) {
 
         if (isInvincible) return;
         isInvincible = true;
 
-        // Minus damage from health, unless that would make health less than MIN_HP, in that case set health to MIN_HP
-        healthPoints = Math.max(healthPoints - damage, MIN_HP);
+        health.takesDamage(damage);
 
-        System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
-                attacker, damage, demonType, demonType, healthPoints, getMaxHP());
+        System.out.format("%s inflicts %d damage points on %s. %s's current health: %s\n",
+                attacker, damage, demonType, demonType, health);
 
     }
 

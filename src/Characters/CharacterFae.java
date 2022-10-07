@@ -20,7 +20,7 @@ public class CharacterFae extends PlayableCharacter {
         if (Fae == null) {
             Fae = new CharacterFae(startingX, startingY);
         } else {
-            Fae.health.resetHP();
+            Fae.getHealth().resetHP();
             Fae.setPosition(startingX, startingY);
         }
         return Fae;
