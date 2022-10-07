@@ -1,7 +1,6 @@
 package Obstacles;
 
 import bagel.Image;
-import bagel.util.Rectangle;
 
 public class Tree extends Obstacle {
 
@@ -14,11 +13,6 @@ public class Tree extends Obstacle {
     @Override
     public Image getImage() {
         return TREE_IMAGE;
-    }
-
-    @Override
-    public boolean contacts(Rectangle rect) {
-        return intersects(rect);
     }
 
 }

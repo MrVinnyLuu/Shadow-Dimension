@@ -1,7 +1,6 @@
 package Obstacles;
 
 import bagel.Image;
-import bagel.util.Rectangle;
 
 public class Wall extends Obstacle {
 
@@ -14,11 +13,6 @@ public class Wall extends Obstacle {
     @Override
     public Image getImage() {
         return WALL_IMAGE;
-    }
-
-    @Override
-    public boolean contacts(Rectangle rect) {
-        return intersects(rect);
     }
 
 }

@@ -15,11 +15,17 @@ public class Level {
         levelBackground = new Image("res/background" + currentLevel + ".png");
     }
 
+    /**
+     * Method causes the game to skip to the last level
+     */
     public void skipToEnd() {
         currentLevel = LAST_LEVEL;
         initializeBackground();
     }
 
+    /**
+     * Method increments to the next level
+     */
     public void nextLevel() {
         if (currentLevel != LAST_LEVEL) {
             currentLevel++;
@@ -27,6 +33,10 @@ public class Level {
         }
     }
 
+    /**
+     * Method keeps track of how long the "Level Complete!" screen should be shown
+     * @return Returns true when the timer is done
+     */
     public boolean levelCompleteTimer() {
 
         if (levelCompleteTimer >= LVL_COMPLETE_DISPLAY_TIME) {
@@ -46,4 +56,5 @@ public class Level {
     public Image getLevelBackground() {
         return levelBackground;
     }
+
 }

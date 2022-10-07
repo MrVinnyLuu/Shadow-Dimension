@@ -48,7 +48,7 @@ public class Demon extends Enemy implements canAttack {
         this.xPos = xPos;
         this.yPos = yPos;
         health = new Health(MAX_HP, MIN_HP);
-        initializeMovementSpeed(false);
+        initializeMovement(false);
     }
 
     public Demon (String specialDemon, double xPos, double yPos, Image specialDemonImage, Health specialDemonHP) {
@@ -57,17 +57,19 @@ public class Demon extends Enemy implements canAttack {
         this.xPos = xPos;
         this.yPos = yPos;
         health = specialDemonHP;
-        initializeMovementSpeed(true);
+        initializeMovement(true);
     }
 
-    public boolean canAttack(PlayableCharacter player) {
-        return (!isExhausted && player.centre().distanceTo(this.centre()) <= getAttackRadius());
+    @Override
+    public boolean inRange(PlayableCharacter player) {
+        return (!isDead && player.centre().distanceTo(this.centre()) <= getAttackRadius());
     }
 
     public double getAttackRadius() {
         return ATTACK_RADIUS;
     }
 
+    @Override
     public void attack(PlayableCharacter player) {
 
         double fireX, fireY;
@@ -132,7 +134,12 @@ public class Demon extends Enemy implements canAttack {
         }
     }
 
-    private void initializeMovementSpeed(boolean guaranteedAggressive) {
+    /**
+     * Method initializes the demon's aggressiveness, movement speed and face direction
+     * @param guaranteedAggressive determines if the demon is guaranteed to be aggressive,
+     *                             rather having than a 50% chance to be.
+     */
+    private void initializeMovement(boolean guaranteedAggressive) {
 
         // 50% chance to be aggressive (Navec is always aggressive)
         if (RAND.nextBoolean() || guaranteedAggressive) {
@@ -153,7 +160,7 @@ public class Demon extends Enemy implements canAttack {
     @Override
     public void updateState() {
 
-        if (health.getHP() <= MIN_HP) isExhausted = true;
+        if (health.getHP() <= MIN_HP) isDead = true;
 
         if (isInvincible) {
             invincibilityTimer += 1.0/ ShadowDimension.REFRESH_RATE;
@@ -206,6 +213,9 @@ public class Demon extends Enemy implements canAttack {
 
     }
 
+    /**
+     * Method changes the timescale for all demons
+     */
     public static void changeSpeedMultiplier(int timescaleStep) {
 
         if (timescaleStep > 0 && timescale < MAX_POS_TIMESCALE) {

@@ -168,7 +168,7 @@ public class ShadowDimension extends AbstractGame {
     private void updateGameObjects() {
 
         for (canAttack attacker : attackers) {
-            if (attacker.canAttack(player)) {
+            if (attacker.inRange(player)) {
                 attacker.attack(player);
             }
         }
@@ -189,9 +189,9 @@ public class ShadowDimension extends AbstractGame {
 
         }
 
-        if (level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isExhausted()) return;
+        if (level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isDead()) return;
 
-        enemies.removeIf(Enemy::isExhausted);
+        enemies.removeIf(Enemy::isDead);
 
     }
 
@@ -212,13 +212,13 @@ public class ShadowDimension extends AbstractGame {
         // Check if player or an enemy has collided with an obstacle
         for (Obstacle anObstacle : obstacles) {
 
-            if (anObstacle.contacts(player)) {
+            if (anObstacle.intersects(player)) {
                 player.xPosRollback();
                 player.yPosRollback();
             }
 
             for (Enemy anEnemy: enemies) {
-                if (anEnemy.intersects(anObstacle)) {
+                if (anObstacle.intersects(anEnemy)) {
                     anEnemy.reverseMovement();
                 }
             }
@@ -337,10 +337,10 @@ public class ShadowDimension extends AbstractGame {
             gameState = LVL_FINISH;
             level.nextLevel();
             // Level 1 win condition: Navec is exhausted (i.e. has been killed)
-        } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isExhausted()) {
+        } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isDead()) {
             gameState = GAME_WIN;
             // Lose condition: Player HP reaches its minimum
-        } else if (gameState == GAME_PLAY && player.getHealth().getHP() == player.getHealth().getMinHP()) {
+        } else if (gameState == GAME_PLAY && player.isDead()) {
             gameState = GAME_LOSE;
         }
 
@@ -369,4 +369,5 @@ public class ShadowDimension extends AbstractGame {
         }
 
     }
+
 }

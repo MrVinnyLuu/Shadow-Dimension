@@ -53,12 +53,15 @@ public class Health {
     }
 
     /**
-     * Method resets the player HP to max
+     * Method resets the HP to max
      */
     public void resetHP() {
         currentHP = maxHP;
     }
 
+    /**
+     * Method displays the HP percent at the specified position using the specified font
+     */
     public void displayHP(Font font, double x, double y) {
         font.drawString(String.format("%d%%", getHPPercent()), x, y,
                 new DrawOptions().setBlendColour(getHPColour()));

@@ -10,5 +10,10 @@ public abstract class Obstacle extends Rectangle {
     }
 
     public abstract Image getImage();
-    public abstract boolean contacts(Rectangle rect);
+
+    @Override
+    public boolean intersects(Rectangle rect) {
+        return super.intersects(rect);
+    }
+
 }

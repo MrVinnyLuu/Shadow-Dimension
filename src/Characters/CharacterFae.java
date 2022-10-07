@@ -16,6 +16,9 @@ public class CharacterFae extends PlayableCharacter {
         super(startingX, startingY, FACE_LEFT);
     }
 
+    /**
+     * Method gets a reference to a global instance of CharacterFae (Singleton Pattern)
+     */
     public static CharacterFae getInstance(double startingX, double startingY) {
         if (Fae == null) {
             Fae = new CharacterFae(startingX, startingY);

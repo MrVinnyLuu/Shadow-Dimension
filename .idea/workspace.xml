@@ -6,16 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="cc5d9ee8-8ff0-4fb7-bb6a-d6a5a2134e92" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Characters/CharacterFae.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Characters/CharacterFae.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Characters/Health.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Characters/Health.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Characters/PlayableCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Characters/PlayableCharacter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Enemies/Demon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Demon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Enemies/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Enemies/Navec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/Navec.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Enemies/canAttack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Enemies/canAttack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Obstacles/Obstacle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Obstacle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Obstacles/Sinkhole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Sinkhole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Obstacles/Tree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Tree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Obstacles/Wall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Obstacles/Wall.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ShadowDimension/ShadowDimension.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Characters/CharacterFae.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Characters/CharacterFae.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Characters/Health.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Characters/Health.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Characters/PlayableCharacter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Characters/PlayableCharacter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Enemies/Demon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Enemies/Demon.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Enemies/Enemy.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Enemies/Enemy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Obstacles/Sinkhole.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Obstacles/Sinkhole.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/ShadowDimension/ShadowDimension.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ShadowDimension/ShadowDimension.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -3,42 +3,52 @@ package Obstacles;
 import Characters.PlayableCharacter;
 import Enemies.canAttack;
 import bagel.Image;
-import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public class Sinkhole extends Obstacle implements canAttack {
 
     private final static Image SINKHOLE_IMAGE = new Image("res/sinkhole.png");
     private final static int DAMAGE = 30;
-    private final static double ATTACK_RADIUS = SINKHOLE_IMAGE.getWidth();
     private boolean isExhausted = false;
 
     public Sinkhole (double xPos, double yPos) {
         super(xPos, yPos, SINKHOLE_IMAGE);
     }
 
+    /**
+     * Returns the sinkhole image only if it isn't exhausted
+     */
     public Image getImage() {
-        if (isExhausted) return null;
-        return SINKHOLE_IMAGE;
+        if (isExhausted) {
+            return null;
+        } else {
+            return SINKHOLE_IMAGE;
+        }
     }
 
-    public boolean canAttack(PlayableCharacter player) {
+    @Override
+    public boolean inRange(PlayableCharacter player) {
         return (!isExhausted && player.intersects(this));
     }
 
     @Override
     public void attack(PlayableCharacter character) {
-        if (isExhausted) return;
-        character.takesDamage("Sinkhole", DAMAGE);
-        isExhausted = true;
+        if (!isExhausted) {
+            character.takesDamage("Sinkhole", DAMAGE);
+            isExhausted = true;
+        }
     }
 
+    /**
+     * Determines if the sinkhole isn't exhausted and the player intersects it
+     */
     @Override
-    public boolean contacts(Rectangle rect) {
+    public boolean intersects(Rectangle rect) {
         if (isExhausted) {
             return false;
+        } else {
+            return super.intersects(rect);
         }
-        return intersects(rect);
     }
 
 }

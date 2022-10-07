@@ -2,10 +2,12 @@ package Characters;
 
 import ShadowDimension.ShadowDimension;
 import Enemies.Enemy;
+
 import bagel.Font;
 import bagel.Image;
 import bagel.Input;
 import bagel.Keys;
+
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
@@ -23,7 +25,6 @@ public abstract class PlayableCharacter extends Rectangle {
     // x and y coordinates refers to the top left corner
     private double xPos, yPos, prevX, prevY;
 
-
     protected PlayableCharacter (double startingX, double startingY, Image referenceImage) {
         // Dimensions taken from the pixel size of leftImage which is assumed to be same as rightImage
         super(startingX, startingY, referenceImage.getWidth(), referenceImage.getHeight());
@@ -35,16 +36,32 @@ public abstract class PlayableCharacter extends Rectangle {
 
     protected abstract String getCharacterName();
 
+    /**
+     * Method determines whether the character is dead
+     */
+    public boolean isDead() {
+        return health.getHP() <= health.getMinHP();
+    }
+
     public Health getHealth() {
         return health;
     }
 
+    /**
+     * Method calls displayHP() from the Health class at the required location
+     */
     public void displayHP(Font font) {
         health.displayHP(font, PLAYER_HP_TEXT_X, PLAYER_HP_TEXT_Y);
     }
 
+    /**
+     * Method returns the correct image depending on direction and character state
+     */
     public abstract Image getImage();
 
+    /**
+     * Method checks and updates the state of the character once every screen refresh
+     */
     private void updateState() {
 
         cooldownTimer += 1.0/ ShadowDimension.REFRESH_RATE;
@@ -105,10 +122,13 @@ public abstract class PlayableCharacter extends Rectangle {
 
     }
 
+    /**
+     * Method calls the intersects() method in the Rectangle class using the current image size
+     * Resolves the fact that attack image and normal images are different sizes
+     */
     @Override
     public boolean intersects(Rectangle rectangle) {
-        // Resolves the fact that attack image and normal images are different sizes
-        return new Rectangle(topLeft(), getImage().getWidth(), getImage().getHeight()).intersects(rectangle);
+        return getImage().getBoundingBox().intersects(rectangle);
     }
 
     /**
@@ -131,7 +151,7 @@ public abstract class PlayableCharacter extends Rectangle {
     }
 
     /**
-     * Method lowers the character's health points according to "damage"
+     * Method lowers the character's health points according to "damage" and prints log
      */
     public void takesDamage(String attacker, int damage) {
 
@@ -145,6 +165,9 @@ public abstract class PlayableCharacter extends Rectangle {
 
     }
 
+    /**
+     * Method calls the target's takeDamage() function using the character's damage value
+     */
     public void dealsDamage(Enemy target) {
         target.takesDamage(getCharacterName(), DAMAGE);
     }
