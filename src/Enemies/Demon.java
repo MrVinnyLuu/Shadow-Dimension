@@ -33,6 +33,7 @@ public class Demon extends Enemy {
 
     private final Random RAND = new Random();
 
+    private String demonType = "Demon"; // Default type is a regular demon
     private double xPos, yPos;
     private double horizontalSpeed = 0, verticalSpeed = 0;
     protected boolean isFaceRight, isInvincible = false;
@@ -40,22 +41,26 @@ public class Demon extends Enemy {
     protected int healthPoints;
 
     public Demon (double xPos, double yPos) {
-        super("Demon", xPos, yPos, FACE_LEFT);
+        super(xPos, yPos, FACE_LEFT);
         this.xPos = xPos;
         this.yPos = yPos;
         healthPoints = MAX_HP;
         initializeMovementSpeed(false);
     }
 
-    public Demon (double xPos, double yPos, Image navecImage, int navecHP) {
-        super("Navec", xPos, yPos, navecImage);
+    public Demon (String specialDemon, double xPos, double yPos, Image specialDemonImage, int specialDemonHP) {
+        super(xPos, yPos, specialDemonImage);
+        demonType = specialDemon;
         this.xPos = xPos;
         this.yPos = yPos;
-        healthPoints = navecHP;
+        healthPoints = specialDemonHP;
         initializeMovementSpeed(true);
     }
 
-    @Override
+    public boolean canAttack(PlayableCharacter player) {
+        return (!isExhausted && player.centre().distanceTo(this.centre()) <= getAttackRadius());
+    }
+
     public double getAttackRadius() {
         return ATTACK_RADIUS;
     }
@@ -98,7 +103,7 @@ public class Demon extends Enemy {
         if (player.intersects(new Rectangle(fireX, fireY, getAttackImage().getWidth(),
                 getAttackImage().getHeight()))) {
 
-            player.takesDamage(getType(), getDamage());
+            player.takesDamage(demonType, getDamage());
 
         }
 
@@ -134,10 +139,10 @@ public class Demon extends Enemy {
         return MAX_HP;
     }
 
-    private void initializeMovementSpeed(boolean guaranteeAggressive) {
+    private void initializeMovementSpeed(boolean guaranteedAggressive) {
 
-        // 50% chance to be aggressive (Enemies.Navec is always aggressive)
-        if (RAND.nextBoolean() || guaranteeAggressive) {
+        // 50% chance to be aggressive (Navec is always aggressive)
+        if (RAND.nextBoolean() || guaranteedAggressive) {
             // 50% chance to move up and down. 50% chance to move left and right
             if (RAND.nextBoolean()) {
                 verticalSpeed = RAND.nextDouble()*(MAX_BASE_SPEED-MIN_BASE_SPEED) + MIN_BASE_SPEED;
@@ -154,6 +159,7 @@ public class Demon extends Enemy {
 
     @Override
     public void updateState() {
+
         if (healthPoints <= MIN_HP) isExhausted = true;
 
         if (isInvincible) {
@@ -199,7 +205,7 @@ public class Demon extends Enemy {
         healthPoints = Math.max(healthPoints - damage, MIN_HP);
 
         System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
-                attacker, damage, getType(), getType(), healthPoints, getMaxHP());
+                attacker, damage, demonType, demonType, healthPoints, getMaxHP());
 
     }
 

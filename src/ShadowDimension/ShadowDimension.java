@@ -20,6 +20,9 @@ import java.util.ArrayList;
 public class ShadowDimension extends AbstractGame {
 
     /* Display Constants */
+    /**
+     * The refresh rate of the monitor. Code only adheres to project specifications using a refresh rate of 60HZ
+     */
     public final static int REFRESH_RATE = 144;
     private final static int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
@@ -79,6 +82,7 @@ public class ShadowDimension extends AbstractGame {
     private final static ArrayList<Enemy> enemies = new ArrayList<>();
     private final static int NAVEC_INDEX = 0;
     private final static ArrayList<Obstacle> obstacles = new ArrayList<>();
+    private final static ArrayList<canAttack> attackers = new ArrayList<>();
 
     /* Attributes */
     private int gameState = GAME_START;
@@ -120,15 +124,21 @@ public class ShadowDimension extends AbstractGame {
         // Populate obstacles & enemies using the rest of the rows of the CSV data
         for (String[] row : csvData) {
             switch (row[DATA_NAME_COL]) {
-                case "Sinkhole":
-                    enemies.add(new Sinkhole(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL])));
-                    break;
                 case "Demon":
-                    enemies.add(new Demon(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL])));
+                    Demon tempDemon = new Demon(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL]));
+                    enemies.add(tempDemon);
+                    attackers.add(tempDemon);
                     break;
                 case "Navec":
-                    enemies.add(NAVEC_INDEX, new Navec(Double.parseDouble(row[DATA_X_COL]),
-                            Double.parseDouble(row[DATA_Y_COL])));
+                    Navec tempNavec = new Navec(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL]));
+                    enemies.add(NAVEC_INDEX, tempNavec);
+                    attackers.add(tempNavec);
+                    break;
+                case "Sinkhole":
+                    Sinkhole tempSinkhole =
+                            new Sinkhole(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL]));
+                    obstacles.add(tempSinkhole);
+                    attackers.add(tempSinkhole);
                     break;
                 case "Wall":
                     obstacles.add(new Wall(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL])));
@@ -164,7 +174,13 @@ public class ShadowDimension extends AbstractGame {
     /**
      * Method loops through each enemy and updates its state
      */
-    private void updateEnemyStates() {
+    private void updateGameObjects() {
+
+        for (canAttack attacker : attackers) {
+            if (attacker.canAttack(player)) {
+                attacker.attack(player);
+            }
+        }
 
         for (Enemy anEnemy : enemies) {
 
@@ -178,16 +194,6 @@ public class ShadowDimension extends AbstractGame {
 
             if (player.isAttacking() && player.intersects(anEnemy)) {
                 player.dealsDamage(anEnemy);
-            }
-
-            if (anEnemy.centre().distanceTo(player.centre()) <= anEnemy.getAttackRadius()) {
-                anEnemy.attack(player);
-            }
-
-            for (Enemy anotherEnemy: enemies) {
-                if (anEnemy.intersects(anotherEnemy)) {
-                    anEnemy.collidesWith(anotherEnemy);
-                }
             }
 
         }
@@ -215,7 +221,7 @@ public class ShadowDimension extends AbstractGame {
         // Check if player or an enemy has collided with an obstacle
         for (Obstacle anObstacle : obstacles) {
 
-            if (player.intersects(anObstacle)) {
+            if (anObstacle.contacts(player)) {
                 player.xPosRollback();
                 player.yPosRollback();
             }
@@ -295,17 +301,17 @@ public class ShadowDimension extends AbstractGame {
 
         // Display the obstacles
         for (Obstacle anObstacle : obstacles) {
-            anObstacle.getImage().draw(anObstacle.centre().x, anObstacle.centre().y);
+            if (anObstacle.getImage() != null) {
+                anObstacle.getImage().draw(anObstacle.centre().x, anObstacle.centre().y);
+            }
         }
 
         // Display the enemies
         for (Enemy anEnemy : enemies) {
             anEnemy.getImage().draw(anEnemy.centre().x, anEnemy.centre().y);
-            if (anEnemy.getHPPercent() >= 0) {
-                ENEMY_HP_TEXT.drawString(String.format("%d%%", anEnemy.getHPPercent()), anEnemy.topLeft().x,
-                        anEnemy.topLeft().y + ENEMY_HP_TEXT_Y_OFFSET,
-                        new DrawOptions().setBlendColour(getHPColour(anEnemy.getHPPercent())));
-            }
+            ENEMY_HP_TEXT.drawString(String.format("%d%%", anEnemy.getHPPercent()), anEnemy.topLeft().x,
+                    anEnemy.topLeft().y + ENEMY_HP_TEXT_Y_OFFSET,
+                    new DrawOptions().setBlendColour(getHPColour(anEnemy.getHPPercent())));
         }
 
         // Display the player
@@ -380,7 +386,7 @@ public class ShadowDimension extends AbstractGame {
             player.controlCharacter(input);
             detectCollisions();
             displayGame();
-            updateEnemyStates();
+            updateGameObjects();
         } else {
             displayScreen();
         }

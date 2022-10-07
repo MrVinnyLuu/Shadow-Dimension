@@ -15,7 +15,7 @@ public class Navec extends Demon {
     private final static Image NAVEC_FIRE = new Image("res/navec/navecFire.png");
 
     public Navec(double xPos, double yPos) {
-        super(xPos, yPos, NAVEC_FACE_LEFT, NAVEC_MAX_HP);
+        super("Navec", xPos, yPos, NAVEC_FACE_LEFT, NAVEC_MAX_HP);
     }
 
     @Override

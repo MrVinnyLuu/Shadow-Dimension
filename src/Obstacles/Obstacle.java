@@ -10,5 +10,5 @@ public abstract class Obstacle extends Rectangle {
     }
 
     public abstract Image getImage();
-
+    public abstract boolean contacts(Rectangle rect);
 }
