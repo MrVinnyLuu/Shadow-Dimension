@@ -11,6 +11,12 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
+/**
+ * // SWEN20003 Project 2, Semester 2, 2022 //
+ * This class represents player controlled characters
+ * @author Vincent Luu, 1269979
+ */
+
 public abstract class PlayableCharacter extends Rectangle {
 
     private final static int MAX_HP = 100, MIN_HP = 0;

@@ -3,6 +3,12 @@ package Enemies;
 import Characters.Health;
 import bagel.Image;
 
+/**
+ * // SWEN20003 Project 2, Semester 2, 2022 //
+ * This class represents Navecs, a type of Demon
+ * @author Vincent Luu, 1269979
+ */
+
 public class Navec extends Demon {
 
     private final static int NAVEC_MAX_HP = 2 * MAX_HP;

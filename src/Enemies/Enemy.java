@@ -4,6 +4,12 @@ import bagel.Font;
 import bagel.Image;
 import bagel.util.Rectangle;
 
+/**
+ * // SWEN20003 Project 2, Semester 2, 2022 //
+ * This class represents in-game enemies
+ * @author Vincent Luu, 1269979
+ */
+
 public abstract class Enemy extends Rectangle {
 
     protected boolean isDead = false;

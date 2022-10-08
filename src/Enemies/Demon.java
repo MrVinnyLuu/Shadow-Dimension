@@ -11,6 +11,12 @@ import bagel.util.Point;
 
 import java.util.Random;
 
+/**
+ * // SWEN20003 Project 2, Semester 2, 2022 //
+ * This class represents Demons, a type of Enemy
+ * @author Vincent Luu, 1269979
+ */
+
 public class Demon extends Enemy implements canAttack {
 
     private final static double DEMON_HP_TEXT_Y_OFFSET = -6;

@@ -4,6 +4,13 @@ import bagel.DrawOptions;
 import bagel.Font;
 import bagel.util.Colour;
 
+/**
+ * // SWEN20003 Project 2, Semester 2, 2022 //
+ * This class encapsulates the health (health point) information of a PlayableCharacter or Enemy
+ * @author Vincent Luu, 1269979
+ */
+
+
 public class Health {
 
     private final static Colour GREEN_HP = new Colour(0, 0.8, 0.2);
