@@ -21,6 +21,7 @@ public abstract class PlayableCharacter extends Rectangle {
     private final static int DAMAGE = 20;
     private final static double PLAYER_STEP = 2;
     private final static double ATTACK_DURATION = 1, COOLDOWN_DURATION = 2, INVINCIBILITY_DURATION = 3;
+
     private final static double PLAYER_HP_TEXT_X = 20, PLAYER_HP_TEXT_Y = 25;
 
     private final Health health = new Health(MAX_HP, MIN_HP);
@@ -128,7 +129,7 @@ public abstract class PlayableCharacter extends Rectangle {
      */
     @Override
     public boolean intersects(Rectangle rectangle) {
-        return getImage().getBoundingBox().intersects(rectangle);
+        return rectangle.intersects(getImage().getBoundingBoxAt(centre()));
     }
 
     /**
@@ -158,10 +159,7 @@ public abstract class PlayableCharacter extends Rectangle {
         if (isInvincible) return;
         if (!attacker.equals("Sinkhole")) isInvincible = true;
 
-        health.takesDamage(damage);
-
-        System.out.format("%s inflicts %d damage points on %s. %s's current health: %s\n",
-                attacker, damage, getCharacterName(), getCharacterName(), health);
+        health.takesDamage(damage, attacker, getCharacterName());
 
     }
 

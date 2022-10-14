@@ -11,7 +11,8 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 
-/** // SWEN20003 Project 2, Semester 2, 2022 //
+/**
+ * // SWEN20003 Project 2, Semester 2, 2022 //
  * This class contains the main method and game specific attributes and methods
  * @author Vincent Luu, 1269979
  */
@@ -103,9 +104,11 @@ public class ShadowDimension extends AbstractGame {
 
         ArrayList<String[]> csvData = readCSV();
 
+        // Reset arraylists
         enemies.clear();
         obstacles.clear();
 
+        // Set up the PlayableCharacter instance using the first row of the CSV data
         player = CharacterFae.getInstance(Double.parseDouble(csvData.get(0)[DATA_X_COL]),
                 Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
 
@@ -119,12 +122,14 @@ public class ShadowDimension extends AbstractGame {
         for (String[] row : csvData) {
             switch (row[DATA_NAME_COL]) {
                 case "Demon":
-                    Demon tempDemon = new Demon(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL]));
+                    Demon tempDemon
+                            = new Demon(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL]));
                     enemies.add(tempDemon);
                     attackers.add(tempDemon);
                     break;
                 case "Navec":
-                    Navec tempNavec = new Navec(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL]));
+                    Navec tempNavec
+                            = new Navec(Double.parseDouble(row[DATA_X_COL]), Double.parseDouble(row[DATA_Y_COL]));
                     enemies.add(NAVEC_INDEX, tempNavec);
                     attackers.add(tempNavec);
                     break;
@@ -153,12 +158,17 @@ public class ShadowDimension extends AbstractGame {
         String row;
         ArrayList<String[]> data = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILEPATH + level.getCurrentLevel() + DATA_FILETYPE))) {
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(DATA_FILEPATH + level.getCurrentLevel() + DATA_FILETYPE))) {
+
             while ((row = br.readLine()) != null) {
                 data.add(row.split(","));
             }
+
         } catch (Exception e) {
+
             e.printStackTrace();
+
         }
 
         return data;
@@ -170,12 +180,14 @@ public class ShadowDimension extends AbstractGame {
      */
     private void updateGameObjects() {
 
+        // Check for and execute valid attacks
         for (canAttack attacker : attackers) {
             if (attacker.inRange(player)) {
                 attacker.attack(player);
             }
         }
 
+        // Update the state of each enemy
         for (Enemy anEnemy : enemies) {
 
             anEnemy.updateState();
@@ -192,8 +204,10 @@ public class ShadowDimension extends AbstractGame {
 
         }
 
+        // Check if Navec is dead before removing
         if (level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isDead()) return;
 
+        // Remove dead enemies
         enemies.removeIf(Enemy::isDead);
 
     }
@@ -317,6 +331,9 @@ public class ShadowDimension extends AbstractGame {
      */
     private void updateGameState(Input input) {
 
+        // Timescale control
+        // Note: Timescale control is in ShadowDimension rather than in PlayableCharacter as I think it makes
+        // more sense here as it changes the game behaviour, rather than being a character control
         if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.L)) {
             Demon.changeSpeedMultiplier(TIMESCALE_INCREASE);
         } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.K)) {
@@ -324,27 +341,39 @@ public class ShadowDimension extends AbstractGame {
         }
 
         if (gameState == GAME_START && input.wasPressed(Keys.W)) {
+
             level.skipToEnd();
             initializeGameObjects();
             gameState = GAME_PLAY;
+
         } else if ((gameState == GAME_START || gameState == LVL1_START) && input.wasPressed(Keys.SPACE)) {
+
             level.nextLevel();
             initializeGameObjects();
             gameState = GAME_PLAY;
+
         } else if (gameState == LVL_FINISH && level.levelCompleteTimer()) {
+
             level.nextLevel();
             gameState = LVL1_START;
-            // Level 0 win condition: Player position is in the portal
+
+        // Level 0 win condition: Player position is in the portal
         } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 0
                 && player.centre().x >= PORTAL_MIN_X && player.centre().y >= PORTAL_MIN_Y) {
+
             gameState = LVL_FINISH;
             level.nextLevel();
-            // Level 1 win condition: Navec is exhausted (i.e. has been killed)
+
+        // Level 1 win condition: Navec is exhausted (i.e. has been killed)
         } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isDead()) {
+
             gameState = GAME_WIN;
-            // Lose condition: Player HP reaches its minimum
+
+        // Lose condition: Player HP reaches its minimum
         } else if (gameState == GAME_PLAY && player.getHealth().isDead()) {
+
             gameState = GAME_LOSE;
+
         }
 
     }

@@ -38,10 +38,15 @@ public class Health {
     }
 
     /**
-     * Method minuses damage from health
+     * Method minuses damage from health and prints out log
      */
-    public void takesDamage(int damage) {
+    public void takesDamage(int damage, String attacker, String victim) {
+
         currentHP = Math.max(currentHP - damage, minHP);
+
+        System.out.format("%s inflicts %d damage points on %s. %s's current health: %s\n",
+                attacker, damage, victim, victim, this);
+
     }
 
     /**

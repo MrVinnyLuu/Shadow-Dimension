@@ -220,10 +220,7 @@ public class Demon extends Enemy implements canAttack {
         if (isInvincible) return;
         isInvincible = true;
 
-        health.takesDamage(damage);
-
-        System.out.format("%s inflicts %d damage points on %s. %s's current health: %s\n",
-                attacker, damage, demonType, demonType, health);
+        health.takesDamage(damage, attacker, demonType);
 
     }
 
