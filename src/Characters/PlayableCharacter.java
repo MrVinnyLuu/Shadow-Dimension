@@ -26,7 +26,7 @@ public abstract class PlayableCharacter extends Rectangle {
 
     private final static double PLAYER_HP_TEXT_X = 20, PLAYER_HP_TEXT_Y = 25;
 
-    public static final ArrayList<String> dontTriggerInvincible =
+    private static final ArrayList<String> DONT_TRIGGER_INVINCIBLE =
             new ArrayList<>() {{
                 // Can potentially add more game objects that don't trigger invincibility but just Sinkhole for now
                 add("Sinkhole");
@@ -148,6 +148,9 @@ public abstract class PlayableCharacter extends Rectangle {
         yPos = prevY;
     }
 
+    /**
+     * Method sets the character's position to (xPos, yPos)
+     */
     public void setPosition(double xPos, double yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
@@ -171,7 +174,7 @@ public abstract class PlayableCharacter extends Rectangle {
         if (isInvincible) return;
 
         // Don't trigger invincibility if attacker is on the "blacklist"
-        if (!dontTriggerInvincible.contains(attacker)) isInvincible = true;
+        if (!DONT_TRIGGER_INVINCIBLE.contains(attacker)) isInvincible = true;
 
         health.takesDamage(damage, attacker, getCharacterName());
 

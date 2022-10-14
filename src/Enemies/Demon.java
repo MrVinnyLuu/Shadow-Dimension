@@ -1,6 +1,5 @@
 package Enemies;
 
-import Characters.Health;
 import ShadowDimension.ShadowDimension;
 import Characters.PlayableCharacter;
 import bagel.DrawOptions;

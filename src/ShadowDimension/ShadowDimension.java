@@ -24,7 +24,7 @@ public class ShadowDimension extends AbstractGame {
      * The refresh rate of the monitor.
      * Note: Code only adheres to project specifications using a refresh rate of 60HZ
      */
-    public final static int REFRESH_RATE = 144;
+    public final static int REFRESH_RATE = 60;
     private final static int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
 
     /* Text and font Constants */
