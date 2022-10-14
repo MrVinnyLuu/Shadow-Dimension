@@ -5,11 +5,9 @@ import bagel.Font;
 import bagel.util.Colour;
 
 /**
- * // SWEN20003 Project 2, Semester 2, 2022 //
  * This class encapsulates the health (health point) information of a PlayableCharacter or Enemy
  * @author Vincent Luu, 1269979
  */
-
 
 public class Health {
 
@@ -22,19 +20,25 @@ public class Health {
     private int currentHP;
     private final int maxHP, minHP;
 
+    /**
+     * Creates a Health object with a minimum HP of minHP and maximum HP of maxHP
+     */
     public Health(int maxHP, int minHP) {
         this.maxHP = maxHP;
         this.minHP = minHP;
         currentHP = maxHP;
     }
 
+    /**
+     * Converts currentHp and maxHP information to a string
+     */
     @Override
     public String toString() {
         return currentHP + "/" + maxHP;
     }
 
     /**
-     * Minus damage from health
+     * Method minuses damage from health
      */
     public void takesDamage(int damage) {
         currentHP = Math.max(currentHP - damage, minHP);
@@ -64,6 +68,13 @@ public class Health {
      */
     public void resetHP() {
         currentHP = maxHP;
+    }
+
+    /**
+     * Method returns true if currentHP is less than or equal to minHP
+     */
+    public boolean isDead() {
+        return (currentHP <= minHP);
     }
 
     /**

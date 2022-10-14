@@ -12,7 +12,6 @@ import bagel.util.Point;
 import java.util.Random;
 
 /**
- * // SWEN20003 Project 2, Semester 2, 2022 //
  * This class represents Demons, a type of Enemy
  * @author Vincent Luu, 1269979
  */
@@ -42,33 +41,36 @@ public class Demon extends Enemy implements canAttack {
 
     private final Random RAND = new Random();
 
-    private String demonType = "Demon"; // Default type is a regular demon
+    private String demonType = "Demon"; // Default type is a "regular demon"
     private double xPos, yPos;
     private double horizontalSpeed = 0, verticalSpeed = 0;
-    protected boolean isFaceRight, isInvincible = false;
+    private boolean isFaceRight, isInvincible = false;
     private double invincibilityTimer = 0;
-    private final Health health;
 
+    /**
+     * Creates a "regular demon"
+     */
     public Demon (double xPos, double yPos) {
-        super(xPos, yPos, FACE_LEFT);
+        super(xPos, yPos, FACE_LEFT, MAX_HP, MIN_HP);
         this.xPos = xPos;
         this.yPos = yPos;
-        health = new Health(MAX_HP, MIN_HP);
         initializeMovement(false);
     }
 
-    public Demon (String specialDemon, double xPos, double yPos, Image specialDemonImage, Health specialDemonHP) {
-        super(xPos, yPos, specialDemonImage);
+    /**
+     * Creates a "special demon" (i.e. not a "regular demon")
+     */
+    public Demon (String specialDemon, double xPos, double yPos, Image specialDemonImage, int maxHP, int minHP) {
+        super(xPos, yPos, specialDemonImage, maxHP, minHP);
         demonType = specialDemon;
         this.xPos = xPos;
         this.yPos = yPos;
-        health = specialDemonHP;
         initializeMovement(true);
     }
 
     @Override
     public boolean inRange(PlayableCharacter player) {
-        return (!isDead && player.centre().distanceTo(this.centre()) <= getAttackRadius());
+        return (!health.isDead() && player.centre().distanceTo(this.centre()) <= getAttackRadius());
     }
 
     public double getAttackRadius() {
@@ -140,6 +142,14 @@ public class Demon extends Enemy implements canAttack {
         }
     }
 
+    public boolean isFaceRight() {
+        return isFaceRight;
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
     /**
      * Method initializes the demon's aggressiveness, movement speed and face direction
      * @param guaranteedAggressive determines if the demon is guaranteed to be aggressive,
@@ -165,8 +175,6 @@ public class Demon extends Enemy implements canAttack {
 
     @Override
     public void updateState() {
-
-        if (health.getHP() <= MIN_HP) isDead = true;
 
         if (isInvincible) {
             invincibilityTimer += 1.0/ ShadowDimension.REFRESH_RATE;

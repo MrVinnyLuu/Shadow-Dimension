@@ -5,9 +5,7 @@ import Enemies.canAttack;
 import bagel.Image;
 import bagel.util.Rectangle;
 
-/**
- * // SWEN20003 Project 2, Semester 2, 2022 //
- * This class represents Sinkholes, a type of Obstacle
+/** This class represents Sinkholes, a type of Obstacle
  * @author Vincent Luu, 1269979
  */
 
@@ -17,6 +15,9 @@ public class Sinkhole extends Obstacle implements canAttack {
     private final static int DAMAGE = 30;
     private boolean isExhausted = false;
 
+    /**
+     * Creates a sinkhole at (xPos, yPos)
+     */
     public Sinkhole (double xPos, double yPos) {
         super(xPos, yPos, SINKHOLE_IMAGE);
     }

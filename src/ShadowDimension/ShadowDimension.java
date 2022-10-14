@@ -11,8 +11,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 
-/**
- * // SWEN20003 Project 2, Semester 2, 2022 //
+/** // SWEN20003 Project 2, Semester 2, 2022 //
  * This class contains the main method and game specific attributes and methods
  * @author Vincent Luu, 1269979
  */
@@ -81,6 +80,9 @@ public class ShadowDimension extends AbstractGame {
     private PlayableCharacter player;
     private Point topLeftCorner, bottomRightCorner;
 
+    /**
+     * Default constructor method for ShadowDimension
+     */
     public ShadowDimension() {
         super(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE);
     }
@@ -341,7 +343,7 @@ public class ShadowDimension extends AbstractGame {
         } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isDead()) {
             gameState = GAME_WIN;
             // Lose condition: Player HP reaches its minimum
-        } else if (gameState == GAME_PLAY && player.isDead()) {
+        } else if (gameState == GAME_PLAY && player.getHealth().isDead()) {
             gameState = GAME_LOSE;
         }
 

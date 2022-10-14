@@ -3,7 +3,6 @@ package ShadowDimension;
 import bagel.Image;
 
 /**
- * // SWEN20003 Project 2, Semester 2, 2022 //
  * This class encapsulates level information for a game
  * @author Vincent Luu, 1269979
  */

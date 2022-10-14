@@ -11,9 +11,7 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-/**
- * // SWEN20003 Project 2, Semester 2, 2022 //
- * This class represents player controlled characters
+/** This class represents player controlled characters
  * @author Vincent Luu, 1269979
  */
 
@@ -31,6 +29,9 @@ public abstract class PlayableCharacter extends Rectangle {
     // x and y coordinates refers to the top left corner
     private double xPos, yPos, prevX, prevY;
 
+    /**
+     * Creates a PlayableCharacter at (startingX, startingY) with dimensions of referenceImage
+     */
     protected PlayableCharacter (double startingX, double startingY, Image referenceImage) {
         // Dimensions taken from the pixel size of leftImage which is assumed to be same as rightImage
         super(startingX, startingY, referenceImage.getWidth(), referenceImage.getHeight());
@@ -40,14 +41,7 @@ public abstract class PlayableCharacter extends Rectangle {
         prevY = startingY;
     }
 
-    protected abstract String getCharacterName();
-
-    /**
-     * Method determines whether the character is dead
-     */
-    public boolean isDead() {
-        return health.getHP() <= health.getMinHP();
-    }
+    public abstract String getCharacterName();
 
     public Health getHealth() {
         return health;
@@ -182,7 +176,7 @@ public abstract class PlayableCharacter extends Rectangle {
         return isAttacking;
     }
 
-    protected boolean isFaceRight() {
+    public boolean isFaceRight() {
         return isFaceRight;
     }
 

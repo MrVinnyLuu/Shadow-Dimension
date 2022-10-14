@@ -3,11 +3,9 @@ package Characters;
 import bagel.Image;
 
 /**
- * // SWEN20003 Project 2, Semester 2, 2022 //
  * This class represents Fae, a PlayableCharacter
  * @author Vincent Luu, 1269979
  */
-
 
 public class CharacterFae extends PlayableCharacter {
 
@@ -37,7 +35,7 @@ public class CharacterFae extends PlayableCharacter {
     }
 
     @Override
-    protected String getCharacterName() {
+    public String getCharacterName() {
         return CHARACTER_NAME;
     }
 

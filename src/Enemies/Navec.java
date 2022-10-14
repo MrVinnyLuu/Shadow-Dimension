@@ -4,7 +4,6 @@ import Characters.Health;
 import bagel.Image;
 
 /**
- * // SWEN20003 Project 2, Semester 2, 2022 //
  * This class represents Navecs, a type of Demon
  * @author Vincent Luu, 1269979
  */
@@ -21,8 +20,11 @@ public class Navec extends Demon {
     private final static Image NAVEC_INVINCIBLE_RIGHT = new Image("res/navec/navecInvincibleRight.png");
     private final static Image NAVEC_FIRE = new Image("res/navec/navecFire.png");
 
+    /**
+     * Creates a Navec (a "special demon")
+     */
     public Navec(double xPos, double yPos) {
-        super("Navec", xPos, yPos, NAVEC_FACE_LEFT, new Health(NAVEC_MAX_HP, MIN_HP));
+        super("Navec", xPos, yPos, NAVEC_FACE_LEFT, NAVEC_MAX_HP, MIN_HP);
     }
 
     @Override
@@ -42,11 +44,11 @@ public class Navec extends Demon {
 
     @Override
     public Image getImage() {
-        if (isFaceRight && isInvincible) {
+        if (isFaceRight() && isInvincible()) {
             return NAVEC_INVINCIBLE_RIGHT;
-        } else if (!isFaceRight && isInvincible) {
+        } else if (!isFaceRight() && isInvincible()) {
             return NAVEC_INVINCIBLE_LEFT;
-        } else if (isFaceRight) {
+        } else if (isFaceRight()) {
             return NAVEC_FACE_RIGHT;
         } else {
             return NAVEC_FACE_LEFT;

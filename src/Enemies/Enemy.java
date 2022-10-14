@@ -1,21 +1,21 @@
 package Enemies;
 
+import Characters.Health;
 import bagel.Font;
 import bagel.Image;
 import bagel.util.Rectangle;
 
-/**
- * // SWEN20003 Project 2, Semester 2, 2022 //
- * This class represents in-game enemies
+/** This class represents in-game enemies
  * @author Vincent Luu, 1269979
  */
 
 public abstract class Enemy extends Rectangle {
 
-    protected boolean isDead = false;
+    protected final Health health;
 
-    public Enemy(double xPos, double yPos, Image referenceImage) {
+    public Enemy(double xPos, double yPos, Image referenceImage, int maxHP, int minHP) {
         super(xPos, yPos, referenceImage.getWidth(), referenceImage.getHeight());
+        health = new Health(maxHP, minHP);
     }
 
     /**
@@ -43,8 +43,11 @@ public abstract class Enemy extends Rectangle {
      */
     public abstract void takesDamage(String attacker, int damage);
 
+    /**
+     * Wrapper method for Health.isDead() for better information hiding of health attribute
+     */
     public boolean isDead() {
-        return isDead;
+        return health.isDead();
     }
 
 }
