@@ -90,7 +90,8 @@ public class Level {
 
             timescale += TIMESCALE_INCREASE;
             System.out.println("Sped up, Speed: " + timescale);
-            // Currently, only Enemy classes are affected but could possibly be extended using Observer Pattern
+            // Currently, only Enemy classes are affected (notified) but this could be extended
+            // using Observer Pattern if needed
             Enemy.setTimescale(timescale);
 
         } else if (currentLevel == 1 && input.wasPressed(Keys.K) && timescale > MAX_NEG_TIMESCALE) {

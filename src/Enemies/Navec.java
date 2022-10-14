@@ -1,6 +1,5 @@
 package Enemies;
 
-import Characters.Health;
 import bagel.Image;
 
 /**
