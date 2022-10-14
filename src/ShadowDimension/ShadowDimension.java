@@ -68,10 +68,6 @@ public class ShadowDimension extends AbstractGame {
     private final static int GAME_START = 0, GAME_PLAY = 1, LVL_FINISH = 2, LVL1_START = 3;
     private final static int GAME_WIN = -1, GAME_LOSE = -2;
     private final static double PORTAL_MIN_X = 950, PORTAL_MIN_Y = 670;
-    private final static int TIMESCALE_INCREASE = 1;
-    private final static int TIMESCALE_DECREASE = -1;
-    private final static double MAX_POS_TIMESCALE = 3;
-    private final static double MAX_NEG_TIMESCALE = -3;
 
     /* Game Object Constants */
     private final static ArrayList<Enemy> enemies = new ArrayList<>();
@@ -82,8 +78,6 @@ public class ShadowDimension extends AbstractGame {
     /* Attributes */
     private int gameState = GAME_START;
     private PlayableCharacter player;
-    private int timescale = 1;
-    private Point topLeftCorner, bottomRightCorner;
 
     /**
      * Default constructor method for ShadowDimension
@@ -117,10 +111,10 @@ public class ShadowDimension extends AbstractGame {
                 Double.parseDouble(csvData.get(0)[DATA_Y_COL]));
 
         // Set the boundaries using the last two rows of the CSV data as per assignment specifications
-        bottomRightCorner = new Point(Double.parseDouble(csvData.get(csvData.size()-1)[DATA_X_COL]),
-                Double.parseDouble(csvData.get(csvData.size()-1)[DATA_Y_COL]));
-        topLeftCorner = new Point(Double.parseDouble(csvData.get(csvData.size()-2)[DATA_X_COL]),
-                Double.parseDouble(csvData.get(csvData.size()-2)[DATA_Y_COL]));
+        level.setBottomRightCorner(new Point(Double.parseDouble(csvData.get(csvData.size()-1)[DATA_X_COL]),
+                Double.parseDouble(csvData.get(csvData.size()-1)[DATA_Y_COL])));
+        level.setTopLeftCorner(new Point(Double.parseDouble(csvData.get(csvData.size()-2)[DATA_X_COL]),
+                Double.parseDouble(csvData.get(csvData.size()-2)[DATA_Y_COL])));
 
         // Populate obstacles & enemies using the rest of the rows of the CSV data
         for (String[] row : csvData) {
@@ -197,8 +191,7 @@ public class ShadowDimension extends AbstractGame {
             anEnemy.updateState();
 
             // Check if enemy has collided with the bounds
-            if (bottomRightCorner.x < anEnemy.topLeft().x || anEnemy.topLeft().x < topLeftCorner.x
-                    || bottomRightCorner.y < anEnemy.topLeft().y || anEnemy.topLeft().y < topLeftCorner.y) {
+            if (level.xOutOfBounds(anEnemy.topLeft().x) || level.yOutOfBounds(anEnemy.topLeft().y)) {
                 anEnemy.reverseMovement();
             }
 
@@ -223,10 +216,10 @@ public class ShadowDimension extends AbstractGame {
 
         // Check if player has collided with the boundaries
         // Separate 'if' statements so player can "slide" along boundaries, but can't "escape" at corners
-        if (bottomRightCorner.x <= player.topLeft().x || player.topLeft().x <= topLeftCorner.x) {
+        if (level.xOutOfBounds(player.topLeft().x)) {
             player.xPosRollback();
         }
-        if (bottomRightCorner.y < player.topLeft().y || player.topLeft().y < topLeftCorner.y) {
+        if (level.yOutOfBounds(player.topLeft().y)) {
             player.yPosRollback();
         }
 
@@ -335,23 +328,7 @@ public class ShadowDimension extends AbstractGame {
      */
     private void updateGameState(Input input) {
 
-        // Timescale control
-        // Note: Timescale control is in ShadowDimension rather than in PlayableCharacter as I think it makes
-        // more sense here as it changes the game behaviour, rather than being a character control
-        if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.L)) {
-            if (timescale < MAX_POS_TIMESCALE) {
-                timescale += TIMESCALE_INCREASE;
-                System.out.format("Sped up, Speed: " + timescale + "\n");
-            }
-            // Currently, only Enemy classes are affected
-            Enemy.setTimescale(timescale);
-        } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.K)) {
-            if (timescale > MAX_NEG_TIMESCALE) {
-                timescale += TIMESCALE_DECREASE;
-                System.out.format("Slowed down, Speed: " + timescale + "\n");
-            }
-            Enemy.setTimescale(timescale);
-        }
+        if (gameState == GAME_PLAY) level.timescaleControl(input);
 
         if (gameState == GAME_START && input.wasPressed(Keys.W)) {
 

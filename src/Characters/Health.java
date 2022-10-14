@@ -17,8 +17,8 @@ public class Health {
     private final static double ORANGE_HP_THRESHOLD = 35;
     private final static Colour RED_HP = new Colour(1, 0, 0);
 
-    private int currentHP;
     private final int maxHP, minHP;
+    private int currentHP;
 
     /**
      * Creates a Health object with a minimum HP of minHP and maximum HP of maxHP
@@ -30,22 +30,14 @@ public class Health {
     }
 
     /**
-     * Converts currentHp and maxHP information to a string
-     */
-    @Override
-    public String toString() {
-        return currentHP + "/" + maxHP;
-    }
-
-    /**
      * Method minuses damage from health and prints out log
      */
     public void takesDamage(int damage, String attacker, String victim) {
 
         currentHP = Math.max(currentHP - damage, minHP);
 
-        System.out.format("%s inflicts %d damage points on %s. %s's current health: %s\n",
-                attacker, damage, victim, victim, this);
+        System.out.format("%s inflicts %d damage points on %s. %s's current health: %d/%d\n",
+                attacker, damage, victim, victim, currentHP, maxHP);
 
     }
 
@@ -54,18 +46,6 @@ public class Health {
      */
     public int getHPPercent() {
         return (int) Math.round(currentHP*100.0/maxHP);
-    }
-
-    public int getHP() {
-        return currentHP;
-    }
-
-    public int getMaxHP() {
-        return maxHP;
-    }
-
-    public int getMinHP() {
-        return minHP;
     }
 
     /**
@@ -94,15 +74,15 @@ public class Health {
      * Method computes the display colour of a given health point percentage
      */
     public Colour getHPColour() {
-        Colour HP_colour;
+
         if (getHPPercent() >= GREEN_HP_THRESHOLD) {
-            HP_colour = GREEN_HP;
+            return GREEN_HP;
         } else if (getHPPercent() >= ORANGE_HP_THRESHOLD) {
-            HP_colour = ORANGE_HP;
+            return ORANGE_HP;
         } else {
-            HP_colour = RED_HP;
+            return RED_HP;
         }
-        return HP_colour;
+
     }
 
 }
