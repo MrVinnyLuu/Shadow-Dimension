@@ -78,7 +78,7 @@ public abstract class PlayableCharacter extends Rectangle {
      */
     private void updateState() {
 
-        cooldownTimer += 1.0/ ShadowDimension.REFRESH_RATE;
+        cooldownTimer += 1.0/ShadowDimension.REFRESH_RATE;
 
         if (isAttacking) {
             attackTimer += 1.0/ShadowDimension.REFRESH_RATE;
