@@ -7,13 +7,14 @@ import bagel.Font;
 import bagel.Image;
 import bagel.Input;
 import bagel.Keys;
-
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
 import java.util.ArrayList;
 
-/** This class represents player controlled characters
+/**
+ * This class represents player controlled characters
+ * [Adapted from my Project 1 submission]
  * @author Vincent Luu, 1269979
  */
 

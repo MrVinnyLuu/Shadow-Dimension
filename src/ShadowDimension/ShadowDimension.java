@@ -14,6 +14,7 @@ import java.util.ArrayList;
 /**
  * // SWEN20003 Project 2, Semester 2, 2022 //
  * This class contains the main method and game specific attributes and methods
+ * [Adapted from my Project 1 submission]
  * @author Vincent Luu, 1269979
  */
 

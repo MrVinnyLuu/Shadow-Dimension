@@ -1,6 +1,7 @@
 package Enemies;
 
 import Characters.Health;
+
 import bagel.Font;
 import bagel.Image;
 import bagel.util.Rectangle;

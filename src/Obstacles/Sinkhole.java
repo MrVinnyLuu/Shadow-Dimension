@@ -2,6 +2,7 @@ package Obstacles;
 
 import Characters.PlayableCharacter;
 import Enemies.canAttack;
+
 import bagel.Image;
 
 /** This class represents Sinkholes, a type of Obstacle that can attack

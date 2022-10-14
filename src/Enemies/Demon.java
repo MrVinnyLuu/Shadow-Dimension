@@ -2,6 +2,7 @@ package Enemies;
 
 import ShadowDimension.ShadowDimension;
 import Characters.PlayableCharacter;
+
 import bagel.DrawOptions;
 import bagel.Font;
 import bagel.Image;

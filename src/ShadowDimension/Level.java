@@ -1,6 +1,7 @@
 package ShadowDimension;
 
 import Enemies.Enemy;
+
 import bagel.Image;
 import bagel.Input;
 import bagel.Keys;
