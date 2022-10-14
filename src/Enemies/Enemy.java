@@ -11,6 +11,8 @@ import bagel.util.Rectangle;
 
 public abstract class Enemy extends Rectangle {
 
+    private static int timescale;
+
     protected final Health health;
 
     public Enemy(double xPos, double yPos, Image referenceImage, int maxHP, int minHP) {
@@ -49,5 +51,14 @@ public abstract class Enemy extends Rectangle {
     public boolean isDead() {
         return health.isDead();
     }
+
+    public static void setTimescale(int timescale) {
+        Enemy.timescale = timescale;
+    }
+
+    public static int getTimescale() {
+        return Enemy.timescale;
+    }
+
 
 }

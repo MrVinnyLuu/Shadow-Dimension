@@ -35,9 +35,6 @@ public class Demon extends Enemy implements canAttack {
     private final static double MAX_BASE_SPEED = 0.7;
 
     private final static double SPEED_MULTIPLIER = 0.5;
-    private final static double MAX_POS_TIMESCALE = 3;
-    private final static double MAX_NEG_TIMESCALE = -3;
-    private static double timescale = 0;
 
     private final Random RAND = new Random();
 
@@ -185,12 +182,13 @@ public class Demon extends Enemy implements canAttack {
         }
 
         double horizontalDisplacement = horizontalSpeed, verticalDisplacement = verticalSpeed;
-        if (timescale > 0) {
-            horizontalDisplacement = horizontalSpeed*Math.pow(1+SPEED_MULTIPLIER, timescale);
-            verticalDisplacement = verticalSpeed*Math.pow(1+SPEED_MULTIPLIER, timescale);
-        } else if (timescale < 0) {
-            horizontalDisplacement = horizontalSpeed*Math.pow(1-SPEED_MULTIPLIER, -timescale);
-            verticalDisplacement = verticalSpeed*Math.pow(1-SPEED_MULTIPLIER, -timescale);
+
+        if (getTimescale() > 0) {
+            horizontalDisplacement = horizontalSpeed*Math.pow(1+SPEED_MULTIPLIER, getTimescale());
+            verticalDisplacement = verticalSpeed*Math.pow(1+SPEED_MULTIPLIER, getTimescale());
+        } else if (getTimescale() < 0) {
+            horizontalDisplacement = horizontalSpeed*Math.pow(1-SPEED_MULTIPLIER, -getTimescale());
+            verticalDisplacement = verticalSpeed*Math.pow(1-SPEED_MULTIPLIER, -getTimescale());
         }
 
         xPos += horizontalDisplacement;
@@ -224,19 +222,5 @@ public class Demon extends Enemy implements canAttack {
 
     }
 
-    /**
-     * Method changes the timescale for all demons
-     */
-    public static void changeSpeedMultiplier(int timescaleStep) {
-
-        if (timescaleStep > 0 && timescale < MAX_POS_TIMESCALE) {
-            timescale += timescaleStep;
-            System.out.format("Sped up, Speed: " + timescale + "\n");
-        } else if (timescaleStep < 0 && timescale > MAX_NEG_TIMESCALE) {
-            timescale += timescaleStep;
-            System.out.format("Slowed down, Speed: " + timescale + "\n");
-        }
-
-    }
 
 }

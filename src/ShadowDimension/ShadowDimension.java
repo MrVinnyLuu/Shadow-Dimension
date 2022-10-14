@@ -21,7 +21,8 @@ public class ShadowDimension extends AbstractGame {
 
     /* Display Constants */
     /**
-     * The refresh rate of the monitor. Code only adheres to project specifications using a refresh rate of 60HZ
+     * The refresh rate of the monitor.
+     * Note: Code only adheres to project specifications using a refresh rate of 60HZ
      */
     public final static int REFRESH_RATE = 144;
     private final static int WINDOW_WIDTH = 1024, WINDOW_HEIGHT = 768;
@@ -69,6 +70,8 @@ public class ShadowDimension extends AbstractGame {
     private final static double PORTAL_MIN_X = 950, PORTAL_MIN_Y = 670;
     private final static int TIMESCALE_INCREASE = 1;
     private final static int TIMESCALE_DECREASE = -1;
+    private final static double MAX_POS_TIMESCALE = 3;
+    private final static double MAX_NEG_TIMESCALE = -3;
 
     /* Game Object Constants */
     private final static ArrayList<Enemy> enemies = new ArrayList<>();
@@ -79,6 +82,7 @@ public class ShadowDimension extends AbstractGame {
     /* Attributes */
     private int gameState = GAME_START;
     private PlayableCharacter player;
+    private int timescale = 1;
     private Point topLeftCorner, bottomRightCorner;
 
     /**
@@ -335,9 +339,18 @@ public class ShadowDimension extends AbstractGame {
         // Note: Timescale control is in ShadowDimension rather than in PlayableCharacter as I think it makes
         // more sense here as it changes the game behaviour, rather than being a character control
         if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.L)) {
-            Demon.changeSpeedMultiplier(TIMESCALE_INCREASE);
+            if (timescale < MAX_POS_TIMESCALE) {
+                timescale += TIMESCALE_INCREASE;
+                System.out.format("Sped up, Speed: " + timescale + "\n");
+            }
+            // Currently, only Enemy classes are affected
+            Enemy.setTimescale(timescale);
         } else if (gameState == GAME_PLAY && level.getCurrentLevel() == 1 && input.wasPressed(Keys.K)) {
-            Demon.changeSpeedMultiplier(TIMESCALE_DECREASE);
+            if (timescale > MAX_NEG_TIMESCALE) {
+                timescale += TIMESCALE_DECREASE;
+                System.out.format("Slowed down, Speed: " + timescale + "\n");
+            }
+            Enemy.setTimescale(timescale);
         }
 
         if (gameState == GAME_START && input.wasPressed(Keys.W)) {
