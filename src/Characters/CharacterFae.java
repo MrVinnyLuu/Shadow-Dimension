@@ -52,5 +52,4 @@ public class CharacterFae extends PlayableCharacter {
        }
     }
 
-
 }

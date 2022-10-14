@@ -11,6 +11,8 @@ import bagel.Keys;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
+import java.util.ArrayList;
+
 /** This class represents player controlled characters
  * @author Vincent Luu, 1269979
  */
@@ -23,6 +25,12 @@ public abstract class PlayableCharacter extends Rectangle {
     private final static double ATTACK_DURATION = 1, COOLDOWN_DURATION = 2, INVINCIBILITY_DURATION = 3;
 
     private final static double PLAYER_HP_TEXT_X = 20, PLAYER_HP_TEXT_Y = 25;
+
+    public static final ArrayList<String> dontTriggerInvincible =
+            new ArrayList<>() {{
+                // Can potentially add more game objects that don't trigger invincibility but just Sinkhole for now
+                add("Sinkhole");
+            }};
 
     private final Health health = new Health(MAX_HP, MIN_HP);
     private boolean isFaceRight = true, isAttacking = false, isInvincible = false;
@@ -60,6 +68,10 @@ public abstract class PlayableCharacter extends Rectangle {
      */
     public abstract Image getImage();
 
+    public boolean isFaceRight() {
+        return isFaceRight;
+    }
+
     /**
      * Method checks and updates the state of the character once every screen refresh
      */
@@ -68,8 +80,7 @@ public abstract class PlayableCharacter extends Rectangle {
         cooldownTimer += 1.0/ ShadowDimension.REFRESH_RATE;
 
         if (isAttacking) {
-
-            attackTimer += 1.0/ ShadowDimension.REFRESH_RATE;
+            attackTimer += 1.0/ShadowDimension.REFRESH_RATE;
             if (attackTimer >= ATTACK_DURATION) {
                 isAttacking = false;
                 attackTimer = 0;
@@ -78,7 +89,7 @@ public abstract class PlayableCharacter extends Rectangle {
         }
 
         if (isInvincible) {
-            invincibilityTimer += 1.0/ ShadowDimension.REFRESH_RATE;
+            invincibilityTimer += 1.0/ShadowDimension.REFRESH_RATE;
             if (invincibilityTimer >= INVINCIBILITY_DURATION) {
                 isInvincible = false;
                 invincibilityTimer = 0;
@@ -124,15 +135,6 @@ public abstract class PlayableCharacter extends Rectangle {
     }
 
     /**
-     * Method calls the intersects() method in the Rectangle class using the current image size
-     * Resolves the fact that attack image and normal images are different sizes
-     */
-    @Override
-    public boolean intersects(Rectangle rectangle) {
-        return rectangle.intersects(getImage().getBoundingBoxAt(centre()));
-    }
-
-    /**
      * Method changes the character's x position back to its immediately preceding x position
      */
     public void xPosRollback() {
@@ -152,12 +154,24 @@ public abstract class PlayableCharacter extends Rectangle {
     }
 
     /**
+     * Method calls the intersects() method in the Rectangle class using the current image size
+     * Resolves the fact that attack image and normal images are different sizes
+     */
+    @Override
+    public boolean intersects(Rectangle rectangle) {
+        return rectangle.intersects(getImage().getBoundingBoxAt(centre()));
+    }
+
+    /**
      * Method lowers the character's health points according to "damage" and prints log
      */
     public void takesDamage(String attacker, int damage) {
 
+        // Damage has no affect while invincible
         if (isInvincible) return;
-        if (!attacker.equals("Sinkhole")) isInvincible = true;
+
+        // Don't trigger invincibility if attacker is on the "blacklist"
+        if (!dontTriggerInvincible.contains(attacker)) isInvincible = true;
 
         health.takesDamage(damage, attacker, getCharacterName());
 
@@ -172,10 +186,6 @@ public abstract class PlayableCharacter extends Rectangle {
 
     public boolean isAttacking() {
         return isAttacking;
-    }
-
-    public boolean isFaceRight() {
-        return isFaceRight;
     }
 
 }

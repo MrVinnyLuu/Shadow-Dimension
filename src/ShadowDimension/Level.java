@@ -53,6 +53,10 @@ public class Level {
         levelBackground = new Image("res/background" + currentLevel + ".png");
     }
 
+    public Image getLevelBackground() {
+        return levelBackground;
+    }
+
     /**
      * Method causes the game to skip to the last level
      */
@@ -69,6 +73,10 @@ public class Level {
             currentLevel++;
             initializeBackground();
         }
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 
     /**
@@ -109,14 +117,6 @@ public class Level {
             return false;
         }
 
-    }
-
-    public int getCurrentLevel() {
-        return currentLevel;
-    }
-
-    public Image getLevelBackground() {
-        return levelBackground;
     }
 
 }

@@ -10,6 +10,8 @@ import bagel.Image;
 
 public class Navec extends Demon {
 
+    private final static String NAVEC_NAME = "Navec";
+
     private final static int NAVEC_MAX_HP = 2 * MAX_HP;
     private final static int NAVEC_DAMAGE = 2 * DAMAGE;
     private final static double NAVEC_ATTACK_RADIUS = 200;
@@ -24,7 +26,7 @@ public class Navec extends Demon {
      * Creates a Navec (a "special demon")
      */
     public Navec(double xPos, double yPos) {
-        super("Navec", xPos, yPos, NAVEC_FACE_LEFT, NAVEC_MAX_HP, MIN_HP);
+        super(NAVEC_NAME, xPos, yPos, NAVEC_FACE_LEFT, NAVEC_MAX_HP, MIN_HP);
     }
 
     @Override

@@ -10,6 +10,8 @@ import bagel.util.Rectangle;
 
 public abstract class Obstacle extends Rectangle {
 
+    private boolean isExhausted = false; // Flag to determine if the obstacle is invalid (e.g. not used up or broken)
+
     /**
      * Creates an obstacle at (xPos, yPos) using referenceImage for dimensions
      */
@@ -23,11 +25,14 @@ public abstract class Obstacle extends Rectangle {
     public abstract Image getImage();
 
     /**
-     * Copy of Rectangle.intersects() so that it can be overridden in certain obstacles
+     * Method sets the obstacle's status to exhausted
      */
-    @Override
-    public boolean intersects(Rectangle rect) {
-        return super.intersects(rect);
+    public void exhaust() {
+        isExhausted = true;
+    }
+
+    public boolean isExhausted() {
+        return isExhausted;
     }
 
 }

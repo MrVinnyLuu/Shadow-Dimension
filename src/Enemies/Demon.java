@@ -139,6 +139,11 @@ public class Demon extends Enemy implements canAttack {
         }
     }
 
+    @Override
+    public void displayHP(Font font) {
+        health.displayHP(font, xPos, yPos+DEMON_HP_TEXT_Y_OFFSET);
+    }
+
     public boolean isFaceRight() {
         return isFaceRight;
     }
@@ -205,11 +210,6 @@ public class Demon extends Enemy implements canAttack {
         } else if (verticalSpeed != 0) {
             verticalSpeed *= -1;
         }
-    }
-
-    @Override
-    public void displayHP(Font font) {
-        health.displayHP(font, xPos, yPos+DEMON_HP_TEXT_Y_OFFSET);
     }
 
     @Override

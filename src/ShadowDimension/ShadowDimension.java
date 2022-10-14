@@ -204,8 +204,9 @@ public class ShadowDimension extends AbstractGame {
         // Check if Navec is dead before removing
         if (level.getCurrentLevel() == 1 && enemies.get(NAVEC_INDEX).isDead()) return;
 
-        // Remove dead enemies
+        // Remove dead enemies and exhausted (no longer active/valid) obstacles
         enemies.removeIf(Enemy::isDead);
+        obstacles.removeIf(Obstacle::isExhausted);
 
     }
 
@@ -270,13 +271,13 @@ public class ShadowDimension extends AbstractGame {
 
             INSTRUCTIONS_TEXT.drawString(START_INSTRUCTION, LVL1_START_X, LVL1_START_Y);
 
-            double attackCtrlXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION) / 2
-                    - INSTRUCTIONS_TEXT.getWidth(ATTACK_CTRL_INSTRUCT) / 2;
+            double attackCtrlXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION)/2
+                    - INSTRUCTIONS_TEXT.getWidth(ATTACK_CTRL_INSTRUCT)/2;
             INSTRUCTIONS_TEXT.drawString(ATTACK_CTRL_INSTRUCT,
                     LVL1_START_X + attackCtrlXOffset, LVL1_START_Y + LINE_SPACING);
 
-            double navecInstructXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION) / 2
-                    - INSTRUCTIONS_TEXT.getWidth(NAVEC_INSTRUCT) / 2;
+            double navecInstructXOffset = INSTRUCTIONS_TEXT.getWidth(START_INSTRUCTION)/2
+                    - INSTRUCTIONS_TEXT.getWidth(NAVEC_INSTRUCT)/2;
             INSTRUCTIONS_TEXT.drawString(NAVEC_INSTRUCT,
                     LVL1_START_X + navecInstructXOffset, LVL1_START_Y + 2*LINE_SPACING);
 

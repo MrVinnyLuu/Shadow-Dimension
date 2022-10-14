@@ -15,20 +15,23 @@ public abstract class Enemy extends Rectangle {
 
     protected final Health health;
 
+    /**
+     * Creates an Enemy at (xPos, yPos) using referenceImage for dimensions
+     */
     public Enemy(double xPos, double yPos, Image referenceImage, int maxHP, int minHP) {
         super(xPos, yPos, referenceImage.getWidth(), referenceImage.getHeight());
         health = new Health(maxHP, minHP);
     }
 
     /**
-     * Method calls displayHP() from the Health class at the required location
-     */
-    public abstract void displayHP(Font font);
-
-    /**
      * Method returns the correct image depending on direction and character state
      */
     public abstract Image getImage();
+
+    /**
+     * Method calls displayHP() from the Health class at the required location
+     */
+    public abstract void displayHP(Font font);
 
     /**
      * Method checks and updates the state of the character once every screen refresh
